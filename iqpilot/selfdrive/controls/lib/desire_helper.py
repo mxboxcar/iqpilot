@@ -25,11 +25,9 @@ NavManeuverPhase = custom.IQNavState.ManeuverPhase
 
 LANE_CHANGE_SPEED_MIN = 20 * CV.MPH_TO_MS
 LANE_CHANGE_TIME_MAX = 10.0
-TURN_DESIRE_STOP_HOLD_TIME = 3.4
-TURN_DESIRE_STOP_GAP_TIME = 0.2
-TURN_DESIRE_STOP_CYCLE_TIME = TURN_DESIRE_STOP_HOLD_TIME + TURN_DESIRE_STOP_GAP_TIME
-TURN_DESIRE_CYCLE_SPEED_MAX = 5 * CV.MPH_TO_MS
-TURN_DESIRE_COMMIT_YAW_RATE = 0.08
+# the model desire history spans 5 s, so one rising edge per 5 s keeps exactly one turn pulse visible
+TURN_DESIRE_PULSE_HOLD_FRAMES = round(5.0 / DT_MDL) - 1
+TURN_DESIRE_PULSE_CYCLE_FRAMES = TURN_DESIRE_PULSE_HOLD_FRAMES + 1
 
 _LANE_CHANGE_DESIRES = {
   (LaneChangeDirection.none, LaneChangeState.off): log.Desire.none,
@@ -52,7 +50,7 @@ _TURN_DESIRES = {
   TurnDirection.turnRight: log.Desire.turnRight,
 }
 
-_STOP_CYCLING_TURN_DESIRES = {
+_PULSED_TURN_DESIRES = {
   log.Desire.turnLeft,
   log.Desire.turnRight,
 }
@@ -111,10 +109,8 @@ class DesireHelper:
     self.lateral_edge_block = LateralEdgeBlock.none
     self.lane_turn_direction = TurnDirection.none
     self.nav_turn_direction = TurnDirection.none
-    self.turn_desire_stop_timer = 0.0
-    self.turn_desire_stop_active = False
+    self.turn_desire_frames = 0
     self.turn_desire_cycle_input = log.Desire.none
-    self.turn_desire_committed = False
 
   @staticmethod
   def get_lane_change_direction(carstate):
@@ -222,43 +218,22 @@ class DesireHelper:
     else:
       self.lane_change_timer += DT_MDL
 
-  def _clear_turn_desire_stop_cycle(self) -> None:
-    self.turn_desire_stop_timer = 0.0
-    self.turn_desire_stop_active = False
+  def _clear_turn_desire_pulse(self) -> None:
+    self.turn_desire_frames = 0
     self.turn_desire_cycle_input = log.Desire.none
-    self.turn_desire_committed = False
 
-  def _cycle_turn_desire_when_stopped(self, desired_output: log.Desire) -> log.Desire:
-    if desired_output not in _STOP_CYCLING_TURN_DESIRES:
-      self._clear_turn_desire_stop_cycle()
+  def _pulse_turn_desire(self, desired_output: log.Desire) -> log.Desire:
+    if desired_output not in _PULSED_TURN_DESIRES:
+      self._clear_turn_desire_pulse()
       return desired_output
 
     if desired_output != self.turn_desire_cycle_input:
-      self.turn_desire_stop_timer = 0.0
-      self.turn_desire_stop_active = False
+      self.turn_desire_frames = 0
       self.turn_desire_cycle_input = desired_output
-      self.turn_desire_committed = False
 
-    if abs(getattr(self._last_carstate, "yawRate", 0.0)) >= TURN_DESIRE_COMMIT_YAW_RATE:
-      self.turn_desire_committed = True
-
-    if self.turn_desire_committed:
-      self.turn_desire_stop_timer = 0.0
-      self.turn_desire_stop_active = False
-      return desired_output
-
-    if self._last_carstate.vEgo > TURN_DESIRE_CYCLE_SPEED_MAX:
-      self.turn_desire_stop_timer = 0.0
-      self.turn_desire_stop_active = False
-      return desired_output
-
-    if not self.turn_desire_stop_active:
-      self.turn_desire_stop_active = True
-      self.turn_desire_stop_timer = 0.0
-
-    cycle_phase = self.turn_desire_stop_timer % TURN_DESIRE_STOP_CYCLE_TIME
-    self.turn_desire_stop_timer += DT_MDL
-    if cycle_phase >= TURN_DESIRE_STOP_HOLD_TIME:
+    cycle_frame = self.turn_desire_frames % TURN_DESIRE_PULSE_CYCLE_FRAMES
+    self.turn_desire_frames += 1
+    if cycle_frame >= TURN_DESIRE_PULSE_HOLD_FRAMES:
       return log.Desire.none
     return desired_output
 
@@ -271,7 +246,7 @@ class DesireHelper:
     else:
       desired_output = _LANE_CHANGE_DESIRES[(self.lane_change_direction, self.lane_change_state)]
 
-    self.desire = self._cycle_turn_desire_when_stopped(desired_output)
+    self.desire = self._pulse_turn_desire(desired_output)
 
   def update(self, carstate, lateral_active, lane_change_prob, nav_state=None, modeldata=None, radar_state=None):
     self._last_carstate = carstate

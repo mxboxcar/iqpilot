@@ -15,10 +15,13 @@ from iqpilot.selfdrive.ui.ui_state import ui_state
 from iqpilot.system.ui.lib.application import FontWeight, gui_app
 from iqpilot.system.ui.lib.text_measure import measure_text_cached
 from iqpilot.system.ui.widgets import Widget
+from iqpilot.ui.onroad.theme import SECONDARY_TEXT
 
 _POLL_S = 1.0
 _FONT_SIZE = 70
 _ICON_H = 76
+_POWER_FONT_SIZE = 32
+_POWER_GAP = 10
 _ICONS = {"MAC": ("mac", 62 / 46), "GPU": ("egpu", 1.0)}
 _GREY = rl.Color(165, 165, 170, 235)
 _WHITE = rl.Color(255, 255, 255, 255)
@@ -75,6 +78,7 @@ class EmacStatusRenderer(Widget):
     super().__init__()
     self._params = Params()
     self._font = gui_app.font(FontWeight.SEMI_BOLD)
+    self._power_font = gui_app.font(FontWeight.MEDIUM)
     self._last_poll = 0.0
     self._label = ""
     self._state = SourceState.HIDDEN
@@ -95,5 +99,19 @@ class EmacStatusRenderer(Widget):
       y = rect.y + rect.height / 2 - size.y / 2
       draw_source_label(self._font, self._label, self._state, rl.Vector2(x, y), _FONT_SIZE)
       return
-    draw_source_icon(self._label, self._state, _ICON_H,
-                     rl.Vector2(rect.x + UI_BORDER_SIZE + BTN_SIZE // 2, rect.y + rect.height / 2))
+    center = rl.Vector2(rect.x + UI_BORDER_SIZE + BTN_SIZE // 2, rect.y + rect.height / 2)
+    draw_source_icon(self._label, self._state, _ICON_H, center)
+    if self._label == "GPU":
+      self._draw_power_draw(center)
+
+  def _draw_power_draw(self, icon_center: rl.Vector2) -> None:
+    sm = ui_state.sm
+    if not sm.alive["egpuDockState"] or sm.recv_frame["egpuDockState"] <= 0:
+      return
+    watts = sm["egpuDockState"].powerDrawW
+    if not math.isfinite(watts) or watts < 0:
+      return
+    text = f"{watts:.0f} W"
+    size = measure_text_cached(self._power_font, text, _POWER_FONT_SIZE)
+    pos = rl.Vector2(round(icon_center.x - size.x / 2), round(icon_center.y + _ICON_H / 2 + _POWER_GAP))
+    rl.draw_text_ex(self._power_font, text, pos, _POWER_FONT_SIZE, 0, SECONDARY_TEXT)

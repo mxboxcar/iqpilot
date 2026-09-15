@@ -43,9 +43,11 @@ def _egpu_state(params: Params, engaged: bool) -> SourceState:
 
 
 def resolve_source(params: Params, engaged: bool) -> tuple[str, SourceState]:
+  if params.get_bool("UsbGpuPresent") and not params.get_bool("IQEgpuDisabled"):
+    return "GPU", _egpu_state(params, engaged)
   if params.get_bool("IQEmacEnabled"):
     return "MAC", _emac_state(params, engaged)
-  if params.get_bool("UsbGpuPresent") or params.get_bool("IQEgpuEnabled"):
+  if params.get_bool("IQEgpuEnabled"):
     return "GPU", _egpu_state(params, engaged)
   return "", SourceState.HIDDEN
 

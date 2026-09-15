@@ -226,6 +226,7 @@ class UIState(IQUIState):
         "carOutput",
         "carControl",
         "vehicleParameters",
+        "egpuDockState",
       ] + self.sm_services_ext
     )
 
