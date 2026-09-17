@@ -705,6 +705,7 @@ class InferenceDaemon:
     populate_iq_model_reasoning(
       iq_msg.iqDriveModelData, outputs, self._reasoning_wire, main_stamp.frame_id, main_stamp.timestamp_eof
     )
+    iq_msg.valid = driving_msg.valid
 
     populate_odometry_message(
       pose_msg,

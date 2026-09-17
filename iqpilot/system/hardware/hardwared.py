@@ -63,7 +63,7 @@ THERMAL_BANDS = OrderedDict({
 OFFROAD_DANGER_TEMP = 75
 
 prev_offroad_states: dict[str, tuple[bool, str | None]] = {}
-ALLOWED_TICI_BRANCHES = {"release-new", "release-tici", "master-mici", "beta", "beta-pq", "release-prebuilt"}
+ALLOWED_TICI_BRANCHES = {"release-new", "release-tici", "release-candidate", "master-mici", "beta", "beta-pq", "release-prebuilt"}
 
 
 class CanStartupRecovery:

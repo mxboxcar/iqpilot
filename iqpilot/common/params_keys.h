@@ -239,6 +239,7 @@ inline static std::unordered_map<std::string, ParamKeyAttributes> keys = {
     {"ModelManager_ModelsCache", {PERSISTENT, JSON}},
 
     {"IQEmacEnabled", {PERSISTENT, BOOL, "0"}},
+    {"IQEmacSerial", {PERSISTENT, STRING}},
     {"IQEmacHost", {PERSISTENT, STRING}},
     {"IQEmacModel", {PERSISTENT, STRING}},
     {"IQEmacSmallModel", {PERSISTENT, BOOL, "0"}},
@@ -318,6 +319,7 @@ inline static std::unordered_map<std::string, ParamKeyAttributes> keys = {
     {"iqMqbSteeringLockout", {PERSISTENT, BOOL, "0"}},
     {"AllowLateralWhenLongUnavailable", {PERSISTENT, BOOL}},
     {"IQEmacEnabled", {PERSISTENT, BOOL, "0"}},
+    {"IQEmacSerial", {PERSISTENT, STRING}},
     {"IQEmacHost", {PERSISTENT, STRING}},
     {"IQEmacModel", {PERSISTENT, STRING}},
     {"IQEmacSmallModel", {PERSISTENT, BOOL, "0"}},

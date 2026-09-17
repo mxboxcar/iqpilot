@@ -4,6 +4,8 @@ Copyright © IQ.Lvbs, apart of Project Teal Lvbs, All Rights Reserved, licensed 
 
 from __future__ import annotations
 
+import math
+
 from iqpilot.cereal import car, custom, log
 
 from iqpilot.common.constants import CV
@@ -25,9 +27,12 @@ NavManeuverPhase = custom.IQNavState.ManeuverPhase
 
 LANE_CHANGE_SPEED_MIN = 20 * CV.MPH_TO_MS
 LANE_CHANGE_TIME_MAX = 10.0
-# the model desire history spans 5 s, so one rising edge per 5 s keeps exactly one turn pulse visible
-TURN_DESIRE_PULSE_HOLD_FRAMES = round(5.0 / DT_MDL) - 1
-TURN_DESIRE_PULSE_CYCLE_FRAMES = TURN_DESIRE_PULSE_HOLD_FRAMES + 1
+# only the rising edge reaches the model and it stays visible for the 5 s the history spans, so one
+# edge per 5 s keeps the turn alive through the maneuver without stacking edges that cut the corner
+TURN_DESIRE_PULSE_CYCLE_FRAMES = round(5.0 / DT_MDL)
+TURN_DESIRE_PULSE_HOLD_FRAMES = TURN_DESIRE_PULSE_CYCLE_FRAMES - 1
+TURN_RECOIL_HEADING_RAD = math.radians(55.0)
+TURN_DESIRE_MAX_SECONDS = 25.0
 
 _LANE_CHANGE_DESIRES = {
   (LaneChangeDirection.none, LaneChangeState.off): log.Desire.none,
@@ -111,6 +116,9 @@ class DesireHelper:
     self.nav_turn_direction = TurnDirection.none
     self.turn_desire_frames = 0
     self.turn_desire_cycle_input = log.Desire.none
+    self.turn_heading_rad = 0.0
+    self.turn_desire_seconds = 0.0
+    self.turn_recoiled = False
 
   @staticmethod
   def get_lane_change_direction(carstate):
@@ -221,11 +229,42 @@ class DesireHelper:
   def _clear_turn_desire_pulse(self) -> None:
     self.turn_desire_frames = 0
     self.turn_desire_cycle_input = log.Desire.none
+    self.turn_heading_rad = 0.0
+    self.turn_desire_seconds = 0.0
+    self.turn_recoiled = False
+
+  def _measured_yaw_rate(self) -> float:
+    # carState.yawRate is left unpopulated by many ports, so the model pose is the primary source
+    rate = getattr(getattr(getattr(self, "_last_modeldata", None), "orientationRate", None), "z", None)
+    try:
+      if rate is not None and len(rate) and math.isfinite(rate[0]):
+        return float(rate[0])
+    except (TypeError, IndexError):
+      pass
+    try:
+      return float(getattr(self._last_carstate, "yawRate", 0.0) or 0.0)
+    except (TypeError, ValueError):
+      return 0.0
+
+  def _turn_recoiled(self, desired_output: log.Desire) -> bool:
+    # blinkers keep running well past the apex, so the executed heading change has to end the
+    # desire: one that outlives the turn keeps steering the plan into the far side of the road
+    if desired_output != self.turn_desire_cycle_input:
+      self.turn_heading_rad = 0.0
+      self.turn_desire_seconds = 0.0
+      self.turn_recoiled = False
+    self.turn_heading_rad += abs(self._measured_yaw_rate()) * DT_MDL
+    self.turn_desire_seconds += DT_MDL
+    if self.turn_heading_rad >= TURN_RECOIL_HEADING_RAD or self.turn_desire_seconds >= TURN_DESIRE_MAX_SECONDS:
+      self.turn_recoiled = True
+    return self.turn_recoiled
 
   def _pulse_turn_desire(self, desired_output: log.Desire) -> log.Desire:
     if desired_output not in _PULSED_TURN_DESIRES:
       self._clear_turn_desire_pulse()
       return desired_output
+
+    recoiled = self._turn_recoiled(desired_output)
 
     if desired_output != self.turn_desire_cycle_input:
       self.turn_desire_frames = 0
@@ -233,7 +272,7 @@ class DesireHelper:
 
     cycle_frame = self.turn_desire_frames % TURN_DESIRE_PULSE_CYCLE_FRAMES
     self.turn_desire_frames += 1
-    if cycle_frame >= TURN_DESIRE_PULSE_HOLD_FRAMES:
+    if recoiled or cycle_frame >= TURN_DESIRE_PULSE_HOLD_FRAMES:
       return log.Desire.none
     return desired_output
 
@@ -250,6 +289,7 @@ class DesireHelper:
 
   def update(self, carstate, lateral_active, lane_change_prob, nav_state=None, modeldata=None, radar_state=None):
     self._last_carstate = carstate
+    self._last_modeldata = modeldata
     self.lateral_edge_guard.update(modeldata, carstate.vEgo, DT_MDL)
     self.lateral_edge_block = LateralEdgeBlock.none
     one_blinker = carstate.leftBlinker != carstate.rightBlinker
