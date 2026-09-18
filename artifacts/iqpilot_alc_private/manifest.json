@@ -21,27 +21,18 @@
   },
   "python/iqpilot_private/konn3kt/iqlvbs/alc.cpython-312-aarch64-linux-gnu.so": {
     "mode": 493,
-    "sha256": "3e278b710bd3c5ee69b463cfb3025932ddc92e790733d95f8c218d61de769704",
-    "size": 468040
-  },
-  "python/iqpilot_private/konn3kt/iqlvbs/angle_tracker.cpython-312-aarch64-linux-gnu.so": {
-    "mode": 493,
-    "sha256": "ef70814b9b380cc0b93041b1ccca50e993336bf13a5a4c23380d99a494727652",
-    "size": 137168
+    "sha256": "a493f4e0e6340b58d5432c560cb33d3d75c63fc141a75808d3cd9e43826e3d1d",
+    "size": 467736
   },
   "python/iqpilot_private/konn3kt/iqlvbs/vehicle_state.cpython-312-aarch64-linux-gnu.so": {
     "mode": 493,
-    "sha256": "fc37e89b7a569fb1a50e841a20168fc36a50ad574e2e3fad1a96d3084d6e8f3e",
+    "sha256": "e823ebf2eb9bdb11018024430fcd2b495c91a05a81d053591594bde204ce8fc4",
     "size": 69608
   },
   "runtime": {
     "entries": {
       "iqpilot_private.konn3kt.iqlvbs.alc": {
         "path": "python/iqpilot_private/konn3kt/iqlvbs/alc.cpython-312-aarch64-linux-gnu.so",
-        "type": "python-module"
-      },
-      "iqpilot_private.konn3kt.iqlvbs.angle_tracker": {
-        "path": "python/iqpilot_private/konn3kt/iqlvbs/angle_tracker.cpython-312-aarch64-linux-gnu.so",
         "type": "python-module"
       },
       "iqpilot_private.konn3kt.iqlvbs.vehicle_state": {
@@ -51,8 +42,7 @@
     }
   },
   "signatures": {
-    "python/iqpilot_private/konn3kt/iqlvbs/alc.cpython-312-aarch64-linux-gnu.so": "IJTrAoJ08yLAjBt3NBjErXVIoAuNXTBHoUVOCjsPuQhwN+PnkSNEzd5nO1sLxzSG5HfbgiljQ32jPP8VrTDSBQ==",
-    "python/iqpilot_private/konn3kt/iqlvbs/angle_tracker.cpython-312-aarch64-linux-gnu.so": "Z+lFLZtP3bUrcu56YEJ0xUzCt2LakywFMCqYaLFM6G4Q1jYeu7Y2/nEpPDfVOSW5hn0XVCYM4C4sT08FJlrrBg==",
-    "python/iqpilot_private/konn3kt/iqlvbs/vehicle_state.cpython-312-aarch64-linux-gnu.so": "9uqsRuEGViBybuh0SxrTdw/uBVGeJXLmS4qhajlXKAVl8HllBQeiF7UY95Di7/yJEDTiSTo4mMJbOcz3UjTSDw=="
+    "python/iqpilot_private/konn3kt/iqlvbs/alc.cpython-312-aarch64-linux-gnu.so": "PTsfrrKC3OGuK55/LZwnRdXu/QZ2rN50EUxBtb5Aj2XSHn1cUoYwcazfbto9Pg2SWvbP2pOJDgpyVC34Aih/Dg==",
+    "python/iqpilot_private/konn3kt/iqlvbs/vehicle_state.cpython-312-aarch64-linux-gnu.so": "Bmd6CXYIcdR5kNhEUjShNR31zv49d4xRL6GcaiAK1jqx3rERjSyvxvMpY2HyJu3ob+b/aAiD7tF7w6Y2syvFBg=="
   }
 }

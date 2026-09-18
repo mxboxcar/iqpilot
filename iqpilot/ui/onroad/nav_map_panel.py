@@ -1125,6 +1125,18 @@ class NavMapPanel(Widget):
     except UnknownKeyName:
       self._online_maps_enabled = True
       self._offline_maps_enabled = False
+
+    has_downloaded_maps = find_offline_mbtiles_path() is not None or find_offline_xyz_root() is not None
+    if gui_app.big_ui() and has_downloaded_maps:
+      enable_panel = not self._maps_enabled
+      enable_offline = not self._offline_maps_enabled
+      self._maps_enabled = True
+      self._offline_maps_enabled = True
+      if not self._force_visible:
+        if enable_panel:
+          self._params.put_bool("OnScreenNavigation", True)
+        if enable_offline:
+          self._params.put_bool("OfflineOSMaps", True)
     try:
       self._heading_up = self._params.get_bool("OSMapsHeadingUp")
     except UnknownKeyName:

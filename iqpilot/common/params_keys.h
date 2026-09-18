@@ -203,6 +203,7 @@ inline static std::unordered_map<std::string, ParamKeyAttributes> keys = {
     {"NightMode", {PERSISTENT, BOOL, "0"}},
     {"newLeadMpc", {PERSISTENT, BOOL, "1"}},
     {"ModelRunnerTypeCache", {CLEAR_ON_ONROAD_TRANSITION, INT}},
+    {"ModelManager_RefreshRequest", {PERSISTENT, BOOL, "0"}},
     {"ForceOnroadUntil", {CLEAR_ON_MANAGER_START | CLEAR_ON_OFFROAD_TRANSITION, INT, "0"}},
     {"IQAlwaysOffroad", {CLEAR_ON_MANAGER_START, BOOL}},
     {"IQBenchIgnition", {PERSISTENT, BOOL, "0"}},
