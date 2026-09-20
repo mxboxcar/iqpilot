@@ -57,6 +57,7 @@ MAX_INFLIGHT_TILES = 8
 TILE_RETRY_BASE_S = 2.0
 TILE_RETRY_MAX_S = 60.0
 TILE_RETRY_LIMIT = 512
+TOKEN_REJECTED_RETRY_S = 600.0
 CAMERA_SMOOTHING = 0.18
 # Cache the map presentation independently of the 60 FPS onroad UI.
 PANEL_RENDER_FPS = max(1, int(os.getenv("IQPILOT_NAV_PANEL_FPS", "12")))
@@ -306,6 +307,8 @@ class RasterTileProvider:
 
 class MapboxTileProvider(RasterTileProvider):
   _perf_provider = "mapbox"
+  _rejected_token = ""
+  _rejected_until = 0.0
 
   def __init__(self, cache_limit: int = CACHE_LIMIT):
     self._cache_limit = cache_limit
@@ -362,6 +365,9 @@ class MapboxTileProvider(RasterTileProvider):
           self._style = style
         url = build_mapbox_tile_url(z, x, y, tile_size=TILE_SIZE, scale=TILE_SCALE, style=style)
         response = self._session.get(url, params={"access_token": token}, timeout=3.0)
+      if response.status_code in (401, 403):
+        self._rejected_token = token
+        self._rejected_until = time.monotonic() + TOKEN_REJECTED_RETRY_S
       response.raise_for_status()
       if not self._cache_disabled:
         cache_path = self._cache_path(tile_key, style)
@@ -512,6 +518,8 @@ class MapboxTileProvider(RasterTileProvider):
     center_tile_x = center_x / TILE_SIZE
     center_tile_y = center_y / TILE_SIZE
     token = self._token()
+    if token == self._rejected_token and time.monotonic() < self._rejected_until:
+      token = ""
 
     for tile_key in visible_tiles:
       self._queue_cached_tile(tile_key)
