@@ -399,7 +399,7 @@ class CarState(CarStateBase):
       self.esp_hold_confirmation = bool(pt_cp.vl["ESP_21"]["ESP_Haltebestaetigung"])
     else:
       self.esp_hold_confirmation = pt_cp.vl["ESC_50"]["Motion_State"] == 3
-    ret.cruiseState.standstill = self.CP.pcmCruise and self.esp_hold_confirmation
+    ret.cruiseState.standstill = (self.CP.pcmCruise or self.CP.openpilotLongitudinalControl) and self.esp_hold_confirmation
 
     if self.CP.pcmCruise:
       ret.cruiseState.speed = float(int(round(acc_values.get("ACC_Wunschgeschw_02", 0)))) * CV.KPH_TO_MS

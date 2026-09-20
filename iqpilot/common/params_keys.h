@@ -297,6 +297,7 @@ inline static std::unordered_map<std::string, ParamKeyAttributes> keys = {
     {"CustomSteerDeltaUpLC", {PERSISTENT, INT, "0"}},
     {"CustomSteerMax", {PERSISTENT, INT, "0"}},
     {"EnableCornerRadar", {PERSISTENT, INT, "0"}},
+    {"CanfdStopRetry", {PERSISTENT, BOOL, "0"}},
     {"EnableRadarTracks", {PERSISTENT, INT, "0"}},
     {"EnableRadarTracksResult", {PERSISTENT | CLEAR_ON_MANAGER_START, INT}},
     {"FingerPrints", {PERSISTENT | CLEAR_ON_MANAGER_START, STRING}},

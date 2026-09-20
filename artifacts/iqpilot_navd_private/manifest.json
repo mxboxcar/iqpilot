@@ -186,12 +186,12 @@
   },
   "python/iqpilot_private/navd/.source_sha": {
     "mode": 420,
-    "sha256": "5420c3a71fa39d0f885e5fca29bd55c09a08980949d71a4da9ca82ab969b161d",
+    "sha256": "8aa7ee1e1f62c06e2ee85df8a3c6169abd3062aed59371936f70bc7fccc13d81",
     "size": 41
   },
   "python/iqpilot_private/navd/__init__.cpython-312-aarch64-linux-gnu.so": {
     "mode": 493,
-    "sha256": "4f647b415cb8359a48853826c4b64338a6a1b9aa8f9ec293fc24c23e09a5a38f",
+    "sha256": "beaae0b68fa44cc8589c8b004d0ec1338fa817ce9565895e5bf3c2446ab4b61c",
     "size": 67640
   },
   "python/iqpilot_private/navd/__init__.py": {
@@ -201,137 +201,137 @@
   },
   "python/iqpilot_private/navd/alpr_matcher.cpython-312-aarch64-linux-gnu.so": {
     "mode": 493,
-    "sha256": "09d0a9b6086b71528c89d94260966c99b7420de947c57dccf6ff95737beb9417",
+    "sha256": "25575956967ba8cf81ead573e0f99e041c430e56ea1cb9eeaa4b9a7426a52880",
     "size": 269896
   },
   "python/iqpilot_private/navd/amap_client.cpython-312-aarch64-linux-gnu.so": {
     "mode": 493,
-    "sha256": "71c44858882915aaef3819e5ca789bcc5f09466d220e1d4906b996970913d4c2",
+    "sha256": "7db62be14296f04c27c483c53f32e7488d96a58f64b9ca4fe81a7a4a05c5e0a5",
     "size": 202104
   },
   "python/iqpilot_private/navd/event_builder.cpython-312-aarch64-linux-gnu.so": {
     "mode": 493,
-    "sha256": "ef2599b5a9ef43b8fc59bc76ac125aa3d19776b439b5640bf75d67b6dba32243",
+    "sha256": "c9cdca993d5b7c507b2a425e6b51c3d1ddabcaa1e793a0d3765eec67e3506e1c",
     "size": 136952
   },
   "python/iqpilot_private/navd/helpers.cpython-312-aarch64-linux-gnu.so": {
     "mode": 493,
-    "sha256": "0f9e011d920c2a34f83f9b58df1e0f5090e24672f92cfef1afaab5ae9fab3edb",
+    "sha256": "044e23a2d0a232af2034050db14c39cb6e2f2a8aa0d29505f34952fce768fd45",
     "size": 135896
   },
   "python/iqpilot_private/navd/incident_feed.cpython-312-aarch64-linux-gnu.so": {
     "mode": 493,
-    "sha256": "f427261876d836d4844c3097300d51f636961048fd9e48e5630ab0daddb56abc",
+    "sha256": "4318f78aba7fe275d20edcf6bde4a12f95de858809c43690c61b1db75bccd091",
     "size": 135464
   },
   "python/iqpilot_private/navd/iqmapd.cpython-312-aarch64-linux-gnu.so": {
     "mode": 493,
-    "sha256": "dab79dc6027f132b04d08ae346e315609ecfad464e78987bec5998e3242bcfe3",
+    "sha256": "6b3863f712fe8f42a885cc2bbc729765779e82d1aa963da89472c8a62095b3f7",
     "size": 135560
   },
   "python/iqpilot_private/navd/long_decel.cpython-312-aarch64-linux-gnu.so": {
     "mode": 493,
-    "sha256": "0c4bf8ac20a3e35fe48d12c2f35ce656ec9b9e5e8f3b8536d422e7092d965abd",
+    "sha256": "16b5edcaed08a437ba585e6da296d3b6132cac4a6cdae409698c344662e7a047",
     "size": 69704
   },
   "python/iqpilot_private/navd/mapbox_client.cpython-312-aarch64-linux-gnu.so": {
     "mode": 493,
-    "sha256": "a92a7e6cc531087ecbad9f44463dc3afab418ea5942256b1912ce302a5225ad7",
+    "sha256": "49f1952d1a85cacd0d51c288ee480d796551dcee4b90ce430a63885c4b61ea2e",
     "size": 68144
   },
   "python/iqpilot_private/navd/model_map_raster_v3.cpython-312-aarch64-linux-gnu.so": {
     "mode": 493,
-    "sha256": "8e1fcf1c627d723683f29897493ec47d45f0b52377f12d91327fc9c3b8d9f436",
+    "sha256": "9b1185a2eed94d79ba71fb9ee110df7c3c6a87dffc7d787a5fe6ea46a85e692a",
     "size": 335360
   },
   "python/iqpilot_private/navd/model_map_tile.cpython-312-aarch64-linux-gnu.so": {
     "mode": 493,
-    "sha256": "2e43cdd56a912b2cb536fe2ecf438a99a2ca19cc4effba3014b1ef137aceeaab",
+    "sha256": "c747d2209edee4c0530ce029b35286fad59c6929203dac5ec8d5b66c6ee53eb9",
     "size": 268840
   },
   "python/iqpilot_private/navd/nav_cameras.cpython-312-aarch64-linux-gnu.so": {
     "mode": 493,
-    "sha256": "e644f8836cfe4b5b269c431f1dab7c30c43b7a1b9204ea83b7ee056ac2acb1af",
+    "sha256": "d96037cf518dce54aeaee03919e1fb91ca61c9b087e0a36a33b10301a91e4dbd",
     "size": 203032
   },
   "python/iqpilot_private/navd/nav_turn_signals.cpython-312-aarch64-linux-gnu.so": {
     "mode": 493,
-    "sha256": "a1ce84f8df8168e3d772853c7fb35e2e733ba0d9d3eff939b1ae2807e128ab0e",
+    "sha256": "383a5618c2b2d4e988dcf8d48a56c34e6bc396ca888ec4c9f1221dee70abd3ce",
     "size": 135512
   },
   "python/iqpilot_private/navd/navbridge_source.cpython-312-aarch64-linux-gnu.so": {
     "mode": 493,
-    "sha256": "23d3021a4562c6d3f5a57792d3adfaba9c8f9fe3930cfd29f558490e779ebdc1",
+    "sha256": "0dec1c85a70f7e82058a8c76272c7a14e302b5d6deeb9d8a60d9e677dcc88e50",
     "size": 202288
   },
   "python/iqpilot_private/navd/navd.cpython-312-aarch64-linux-gnu.so": {
     "mode": 493,
-    "sha256": "c07727af670c48c5d9924c456997e9a1e06b0a84674adc02ca71bd09d1951168",
-    "size": 928464
+    "sha256": "f705c1916fe99aee6461c6dc340ef5a601a28a5ad8d8bcb400ecba1b8c69ce36",
+    "size": 928496
   },
   "python/iqpilot_private/navd/navincidentd.cpython-312-aarch64-linux-gnu.so": {
     "mode": 493,
-    "sha256": "76e1af5f7ae92c66bf915ef2d159edaedc0f09b6f73f86fe87f728982a287896",
+    "sha256": "482f1fb59170895b61584539b89d03789d83ff281727a757ee722a3d64fb396e",
     "size": 135232
   },
   "python/iqpilot_private/navd/navrenderd.cpython-312-aarch64-linux-gnu.so": {
     "mode": 493,
-    "sha256": "3ba1cc9ca05a7325984802daa4d1fb8e288820d9a7c26a4646f03dbca78a8b2f",
+    "sha256": "47da115bcfdedfe3419aafb8dc895ae6144e0636ac6b5031ab93ac787a58f7dc",
     "size": 135520
   },
   "python/iqpilot_private/navd/osm_cameras.cpython-312-aarch64-linux-gnu.so": {
     "mode": 493,
-    "sha256": "e9d3edb72543b6c373da844ae6406a97eba6671239c109bf98c9354ddeebb456",
+    "sha256": "89240e177449ba1f4ac058a5fe7bcc5cfb8159f179cabb097eb87f6aa37a9ebf",
     "size": 267848
   },
   "python/iqpilot_private/navd/reroute.cpython-312-aarch64-linux-gnu.so": {
     "mode": 493,
-    "sha256": "cc4c8e2ac94297ab80fc35b4cd35a73a88391084435781355ea81f6cb913d9d0",
+    "sha256": "9aae287911eb8a30dfb2a2136d71ee79f5744dea768e6ddcf36baeeb256cf509",
     "size": 136120
   },
   "python/iqpilot_private/navd/road_incidents.cpython-312-aarch64-linux-gnu.so": {
     "mode": 493,
-    "sha256": "3f30ecbf54edc46edd02ee0e47f99310a357909ce5cc7cde765e3fa67be3144f",
+    "sha256": "0f0ecdcf880136b1069dfb6ecca58a131d3be0f9e766fc53f937bfd0e9a1ec04",
     "size": 203096
   },
   "python/iqpilot_private/navd/route_manager.cpython-312-aarch64-linux-gnu.so": {
     "mode": 493,
-    "sha256": "c3b61867ce6a77338973c257ac36f7a98a97e4601ed04a03e990154780673823",
-    "size": 1077136
+    "sha256": "bbd2fc965cd5643b1293c84785def9281aa803cf92a65519ee1f6695be6d588e",
+    "size": 1077464
   },
   "python/iqpilot_private/navd/runtime_common.cpython-312-aarch64-linux-gnu.so": {
     "mode": 493,
-    "sha256": "2ae7a8a5196612d11cb38c7309a837ae856b1bf1ff6962dc17aa9f67b0332b56",
+    "sha256": "9fd8efb2e3f9c299a0fd68dc0eb0bcb3dec1c5754ba7cdd8a656b1eaf1d1672b",
     "size": 135792
   },
   "python/iqpilot_private/navd/traffic.cpython-312-aarch64-linux-gnu.so": {
     "mode": 493,
-    "sha256": "20fdd8a63f886d17b690ac4c6310ae8d359b25c936c9a6411032e746ebea8e94",
+    "sha256": "d591681017f138fff2503c587409f952b17c2b3fa110c05a5c217b9e9f9ad9f0",
     "size": 69664
   },
   "python/iqpilot_private/navd/traffic_sources.cpython-312-aarch64-linux-gnu.so": {
     "mode": 493,
-    "sha256": "29aeeeac794417c96dd87d87de6d18a83c67c8b09fd3c90ce1c1cab5083cb9d5",
+    "sha256": "b7b6d809c6c12cd8e6f1ba010a6567d949c972247af65b97bb020a1f9615c039",
     "size": 135896
   },
   "python/iqpilot_private/navd/traffic_writer.cpython-312-aarch64-linux-gnu.so": {
     "mode": 493,
-    "sha256": "50fd3d5308da9233e99917bd17b1a414ca366d5b954dfbf6be91c3e41771393a",
+    "sha256": "c6c1c64bbde5db78bceb6cf23eff4df5ef56e318c3f23ae77bd6571f47a18e78",
     "size": 136912
   },
   "python/iqpilot_private/navd/turn_desire.cpython-312-aarch64-linux-gnu.so": {
     "mode": 493,
-    "sha256": "93c7a428cdc2d9227165fb7cb048a13ddc8457f3b38922969d720bb9fdbc9cc3",
-    "size": 69720
+    "sha256": "6d19871ca384dd28129a7c8500c9e8809713a4c40924fc84b9916eecbe7fd7d8",
+    "size": 135464
   },
   "python/iqpilot_private/navd/valhalla_process.cpython-312-aarch64-linux-gnu.so": {
     "mode": 493,
-    "sha256": "f95550e2b26cbee35961af091689ddf3aa5479c96b18ac4558ddf99eaccf0004",
+    "sha256": "95103e568c535e76c725424853cef837d3648c60b7a106e2b34aef030faf4308",
     "size": 204048
   },
   "python/iqpilot_private/navd/web_server.cpython-312-aarch64-linux-gnu.so": {
     "mode": 493,
-    "sha256": "db8abb1866b0e76e5247af64c33263a0f3302ba6fa8af2ea0b7fd51cf9bd5a61",
+    "sha256": "eb805442599e29542446cd5dc8b5d8be12baace5fb1ef2a060e1e1a76dcbf53b",
     "size": 266880
   },
   "runtime": {
@@ -371,33 +371,33 @@
     }
   },
   "signatures": {
-    "python/iqpilot_private/navd/__init__.cpython-312-aarch64-linux-gnu.so": "DICWgIa1BTMCIGfr57LLCkm6I8dTdCJztOmS+8J6JeffE0X4nDz3xXNvWpK/fjnILQTEz+Z21vgb1ToC5hHQAg==",
-    "python/iqpilot_private/navd/alpr_matcher.cpython-312-aarch64-linux-gnu.so": "Qrwr3G6l4MEl+Dv0L0pKwVJVztaa/ET/i3wT2v1RMVWvWguJXY9zJAzKHTHIDf2uiEIavPPTZsrlfeDZfDDbBA==",
-    "python/iqpilot_private/navd/amap_client.cpython-312-aarch64-linux-gnu.so": "KvmQG3XRrNkOb6QQiz58lrkAuDxcpezsxB0O8n+HNExQ1670nE5nVXAutdCUaMm0RYwt/1BiMDIh537HlBGpBA==",
-    "python/iqpilot_private/navd/event_builder.cpython-312-aarch64-linux-gnu.so": "kLWHlPIXXaVXBMFIuQVZWyDW/qHbz13wxNoEIttt/rgSEErvmvxnUGct5ildwILtl4qOZdC+AqLit4Q9msU6Bg==",
-    "python/iqpilot_private/navd/helpers.cpython-312-aarch64-linux-gnu.so": "lOW0Mhg08KefdafZoWHff3cKEll7+IwRqrYjVGq150hUev09dDv7ii1uHwbVsbUIDfVuqcCWHAN2GiZBtftMDg==",
-    "python/iqpilot_private/navd/incident_feed.cpython-312-aarch64-linux-gnu.so": "oMkbF1417LpiNCli0MYzT1ks2Nrr2OxEwyItfHM/jKe2VaMtAd+29dLNQ4xIW6UJSJa7SRAH3i64jmTrM1+GDg==",
-    "python/iqpilot_private/navd/iqmapd.cpython-312-aarch64-linux-gnu.so": "E5O+3x1YoqX6j1M5mcHTktFVnsei+mEAlLlq/UGlzziJXXuT8WOcGDmJcbSaxVgeS4j0H+gcIxM/J8Z5widoAA==",
-    "python/iqpilot_private/navd/long_decel.cpython-312-aarch64-linux-gnu.so": "XBqAiWegRzinPk2ieD4N68aT9km2nttnloog3AzVfDVvWNhYvkT+9sW3wrx3XjvGV9daduvU7LDD+QeioHlvDA==",
-    "python/iqpilot_private/navd/mapbox_client.cpython-312-aarch64-linux-gnu.so": "XWJNwnXlLNJbcW2ZebdWvNXoq1wQFvpujfq3vaAFAl/TwsDcaB20QiQoWJOBK9bCL1jT1lBzDZ3OT1MQ193PAQ==",
-    "python/iqpilot_private/navd/model_map_raster_v3.cpython-312-aarch64-linux-gnu.so": "z7PCNvdZ1rSGv/tIIvItbP74rZXYsg993Jz9p02R+ywwCwEKR+P0qZdP62jUnKxESDjqnxr9Q9YYyHqaxHwNDA==",
-    "python/iqpilot_private/navd/model_map_tile.cpython-312-aarch64-linux-gnu.so": "LD2k5Elft/gGXHBJnzf6X4ObnpX4h/znsQ+DeEIID4y/7EZ0TH4/epWl8Fbu6OGQXGtbTRHoAPUdsCYTk5zpCw==",
-    "python/iqpilot_private/navd/nav_cameras.cpython-312-aarch64-linux-gnu.so": "j3DD5VhdN7xG9diroDDs67EseU1lIJezAqpxIoZ+sHgVjr67k1L04aX5ozW0CzE/xGe0noCwVtVA7tq6sBg7CA==",
-    "python/iqpilot_private/navd/nav_turn_signals.cpython-312-aarch64-linux-gnu.so": "RjnOz9MkOqjyJeBYmzFEmyLmcDyAdOB7v3k+DL/Z9rQZClBF3tVgZoNUFSHGh7VVjgQJym4LQthYcXxB0iIiAA==",
-    "python/iqpilot_private/navd/navbridge_source.cpython-312-aarch64-linux-gnu.so": "/KV69t5yLS34sNOsIntg+QzcETs8q6ZQ3qntnbUt6f3s+SQ4szti8gLLmpQtGceVDWEY2o+bq3LtL3WLxQD5DA==",
-    "python/iqpilot_private/navd/navd.cpython-312-aarch64-linux-gnu.so": "2FWlsiqunYoJPyA0ccKiQ4TyDp4EUHiPIGba3kbB+gmxiQSJ92FfGUsmK/6zLE5A+C/e7OHnJh2Oj1a9X9i0Aw==",
-    "python/iqpilot_private/navd/navincidentd.cpython-312-aarch64-linux-gnu.so": "Dy7NMHprQgKwmVGwZbbEkl0HlHMnwa3vnvPWUKlQJJsGLowywlfHoWLjJR9Z10jNU0BCrgyoj/QGI/Gh31WKBQ==",
-    "python/iqpilot_private/navd/navrenderd.cpython-312-aarch64-linux-gnu.so": "eT+Xb8/ipyhi0vIO6IEJNP49AJAHyiuz3zaxdKuVFXIvhQG8QbD9p22WxrGWxudgmzBTH5rmvE9Yb17AjrHcBg==",
-    "python/iqpilot_private/navd/osm_cameras.cpython-312-aarch64-linux-gnu.so": "ToRD8oDzrtOBBTxl0Luhz4hwxr4a6KpqyTdpdtM/d/L6rrqz1tcyvWL+8OiyfzbbZAs7KU8Gke2GpvnRMWcUDA==",
-    "python/iqpilot_private/navd/reroute.cpython-312-aarch64-linux-gnu.so": "QAIYUrmFLbgymI1lIvdtj3l2jbaqzSchZWczlCmlMxU2noTd5ChrWuV/q+kAXkjjqebT0pHwG7Tj/bt3T0fFBg==",
-    "python/iqpilot_private/navd/road_incidents.cpython-312-aarch64-linux-gnu.so": "12pFDwVWWYVn5WwG3AO0n/97a6tb6TMsjPY99NoKhu46JffoPKRObq51joqjMG8k9z7nqwqwvd8azQ6UopXIBg==",
-    "python/iqpilot_private/navd/route_manager.cpython-312-aarch64-linux-gnu.so": "0d0f2f1HLnNP63mxSF9b+oQZPlaew6vY99juX5kgYGWlXEOBCrd9GwtQJzPZKEcX3zdHJHmzSzEcO0YjhdIyCg==",
-    "python/iqpilot_private/navd/runtime_common.cpython-312-aarch64-linux-gnu.so": "3iFxDdV8z0uA8RDegy+jmGJleXxqe4LasquNV/NkFDVbG+InTwUjZYp5A/MS0TK3BSQjIintgdwDQMjfFrg8DA==",
-    "python/iqpilot_private/navd/traffic.cpython-312-aarch64-linux-gnu.so": "WMEkhhIAJB2Q3vnbi/DBDEignYMQlYMCA3vUaZiFIXo2RpvB5lmgC1ZzNrMqhSDKNZNRAQ7dL/32KsPi+b+oCg==",
-    "python/iqpilot_private/navd/traffic_sources.cpython-312-aarch64-linux-gnu.so": "SwBiBWxYBjMMCf4d4jOGkGdSDHBuBANeaPBJYg24bfolwduwozOGTr/fNN5ptJX18IxMwTnl9kSxBeuPnL1WDA==",
-    "python/iqpilot_private/navd/traffic_writer.cpython-312-aarch64-linux-gnu.so": "zZ+MQG29ffNQ4C2MddYWcCZ2Kn93gKvXRjXB4o0pRVXa2DESjKGQwzqYQIANKvw8LDZ6Q3f3qZml9whZVTBKCg==",
-    "python/iqpilot_private/navd/turn_desire.cpython-312-aarch64-linux-gnu.so": "dicUxpscicC1f8d7yFecr7UknVo0kMQTDEJ3Ai4nI9cT9SMeTk36qWiiu2SkpsWKgAGkzoG8thWmflUrhEiHBQ==",
-    "python/iqpilot_private/navd/valhalla_process.cpython-312-aarch64-linux-gnu.so": "b5E5nmJEv6TOx0gkWQBKX4r4DWt24XprkeVGJKU7Iy4bFQPprrpTRzsbm2nsS1z5KmjZ6RERadyQvz79lDtUBw==",
-    "python/iqpilot_private/navd/web_server.cpython-312-aarch64-linux-gnu.so": "osPIRnIW166OeotN9Z5mElpdGUVk0VyjsOO8sv8Sa0ikUzWJU6xczrsZaNQLb3fl9jafsim9VM3I6dlY9Q1YDw=="
+    "python/iqpilot_private/navd/__init__.cpython-312-aarch64-linux-gnu.so": "E+5R65SPWBi1Uvkd8H3FBb4AR8VdN77sokhisvE6jDOHU/Z219ykcpAQ1A5e2+lzREmnydoNQpUFiZOMhAMXDQ==",
+    "python/iqpilot_private/navd/alpr_matcher.cpython-312-aarch64-linux-gnu.so": "496rIvt+Apk9kp2bwaxBGXMRq+HpltD5TcxZ1NXK7QV5RRtzbC58d6A5k/Vs5LcRnD3tBsLsQCNr5xUWkt1XBA==",
+    "python/iqpilot_private/navd/amap_client.cpython-312-aarch64-linux-gnu.so": "wa0ti5mhWBenedR/ZdTcJWs2PNJelBqHdfuutCdNCpgqG3889/1yCHhZMeq8voOLM1v4AMpQ9psjW/QJWjHpCg==",
+    "python/iqpilot_private/navd/event_builder.cpython-312-aarch64-linux-gnu.so": "GYi9cEPXb2+3GxtegCgSomkoWAfeOBYc/WfnEAEWOA1m1cEZf01wilm8Q+QKYJXKgW8RK34KtD6rPV5+nFlaDQ==",
+    "python/iqpilot_private/navd/helpers.cpython-312-aarch64-linux-gnu.so": "XOoOUefY4AETyjZxSbI1DMdsdvpBY3WveNTTGIallzYiznsXcisGisceI/XFAiDhJEWkdAsRg4oGvdIrLBpIBg==",
+    "python/iqpilot_private/navd/incident_feed.cpython-312-aarch64-linux-gnu.so": "uAZZm7ymbpNt7k6XN9N4br5EuW2FjCDhy4Mu7cNTxF0TuxeAUkWL0N0tRZohO3wb9YZxbQMAo3iArY2Asw8jAw==",
+    "python/iqpilot_private/navd/iqmapd.cpython-312-aarch64-linux-gnu.so": "ICI1t6cp3bIFSoLOnvhA3zR0wLNmiumx36ryw9DwUKys83tEqFxMroboFOk4JPYMFVAjW7Gfd0IHfiMfnYn4AA==",
+    "python/iqpilot_private/navd/long_decel.cpython-312-aarch64-linux-gnu.so": "st0ltLk4L00g91teHPFXjJ3UyfXHCw2gjwZjBcmv9rOnm2bue2PB762F9TpkwjcQ3TH6Y6yef0InqbILpAqIAQ==",
+    "python/iqpilot_private/navd/mapbox_client.cpython-312-aarch64-linux-gnu.so": "e7VpWSoaROIguyk6YSz7Cqv0ZSsElLG55+H/sfxgURwIs3opnFuBaHzvV6riXLCpj+roCVWo/k6GU1yp6CzOCQ==",
+    "python/iqpilot_private/navd/model_map_raster_v3.cpython-312-aarch64-linux-gnu.so": "uoJ/x3lBLmiT/lZhnH/0choDsYfvNGgGBO3CWITwMoSWwWnjv+QbutPcCLmQx064SxP6alMlujzGipsa2/6VAg==",
+    "python/iqpilot_private/navd/model_map_tile.cpython-312-aarch64-linux-gnu.so": "tP8EmOJLWhU0vmprlYHUGOXkLxwwj6TGEsMOZ0NBIrMX/53dB5LVxW57q49zAbCybcA5SkPBGRjsAaAdcnlNDQ==",
+    "python/iqpilot_private/navd/nav_cameras.cpython-312-aarch64-linux-gnu.so": "aLQZNhytbDQTZRrca/E074QD9tfxYrnKgnxHRiciOTklgvvRRWqbsuV2SLpBNpKIhl3qfanzT9Kl6Y9OWAdzDg==",
+    "python/iqpilot_private/navd/nav_turn_signals.cpython-312-aarch64-linux-gnu.so": "Jbz/V/Wo2xaKa68mTKzcmyPtW7QPFBfU6OUtewNcXBLflpL5PmLm636xWcJ0kxeHqhHwkWssSB3S6KyyRewvAg==",
+    "python/iqpilot_private/navd/navbridge_source.cpython-312-aarch64-linux-gnu.so": "H+j7yEyvk7HV4wqyzR5ktcHTlOqTuW1aPVTg7eHeR50FyaD0VtDltD4OcAIO13YQuO0v8Ff2IJ4hVGTa+l/lBw==",
+    "python/iqpilot_private/navd/navd.cpython-312-aarch64-linux-gnu.so": "Q1WLghrqvs46fWlxtk4dthMy2Z1nxXSzbkQ5fiZMIElJQmcZgn8CfMeV4yhsX+sO5Q8qz1gbcQeiu3kpKFQ8Dw==",
+    "python/iqpilot_private/navd/navincidentd.cpython-312-aarch64-linux-gnu.so": "7o2DbCR4TdDqD5Y5h5/0jpegHvrMpu/BtUxm63u63vmLh1XVBlBdcXeMHStlBBU7YXJYozlHBaWVro57JE67Bg==",
+    "python/iqpilot_private/navd/navrenderd.cpython-312-aarch64-linux-gnu.so": "Jtm7rYUstnQz0c82qfqWmS8kSKD2UZBglSO4bUaE9aGiskezthgB9DWjXP7Zl1jpaowvDG42pMhmBCmSyCHWDw==",
+    "python/iqpilot_private/navd/osm_cameras.cpython-312-aarch64-linux-gnu.so": "CPvDArcecD8pVd9EoCyxYndpzwgqrt5eflTH0WtWU5HxdPmCtONQ+itP883xJG0kgb+HEdGxrTnLbkox9x0CBg==",
+    "python/iqpilot_private/navd/reroute.cpython-312-aarch64-linux-gnu.so": "nf+dJ+uxE1d4dP0/rKjZMgwBfVAWbO9r5kNxFCeKdnUQWnGavrOAK1OOOXaV+CRpyqdjekGw0BRfxuLwPqolBg==",
+    "python/iqpilot_private/navd/road_incidents.cpython-312-aarch64-linux-gnu.so": "o0L6BArjz073RS/FsPa7X0xkx9ChPqyHaSu1WyjYblGj2ZrPba6DXAD1DFRtAccINQ7fkCRRUtU4XlwzsaY+BA==",
+    "python/iqpilot_private/navd/route_manager.cpython-312-aarch64-linux-gnu.so": "mm23d+ZLwKkRluT8BbijNUCUDWXgpfXuHQRZihoOSQytHYn+mnFPE82uS8B+qMe51xVr/WGo1oGK5dDdU1BvCw==",
+    "python/iqpilot_private/navd/runtime_common.cpython-312-aarch64-linux-gnu.so": "cFgo1lIaYCAHVAf0novbXbAuBFNf94MicORGpsjaIeAIOAGx4meqS/GvKDkXj0n1iXDBtjcAx7CvMPtnE8hXAA==",
+    "python/iqpilot_private/navd/traffic.cpython-312-aarch64-linux-gnu.so": "8R4Vex09mLLRaHFloq0DUFURTlS126El6F8SFaaNKUA9mW1oqZCO0Dbif4TdyVE1Xps83WtTAwXoWHLCXzyjDw==",
+    "python/iqpilot_private/navd/traffic_sources.cpython-312-aarch64-linux-gnu.so": "o8bsG2pq3rNBN2zyzOKMG8TW7dspXxvZK50YZmtKuFbqoa8iDMrknC+oUHq9I+Bh24ZHPp+QUuhgzs60vdhbBQ==",
+    "python/iqpilot_private/navd/traffic_writer.cpython-312-aarch64-linux-gnu.so": "ydkskLfypalTVb2rC4kcY9agCVvDTZu5xtaKhhShQqFPB/YURAD88YUVyzH/awARepkoTP2uuDd/l5kOeauoCA==",
+    "python/iqpilot_private/navd/turn_desire.cpython-312-aarch64-linux-gnu.so": "EgLYy4W3p2S2kvlfCyVtPbSICS8aOlOyldQrjC97Jy6XdDBUncqGMgk5sDrCcFjJ2UWtPktoO+WcifLVJ5kMBg==",
+    "python/iqpilot_private/navd/valhalla_process.cpython-312-aarch64-linux-gnu.so": "h3whSI4JCDlI1VT3UETpGNTSiQoD64edIuYq4Txo+ONxAgln/iGEqkXkH6Ry2ALj//NaAKxTE5rgknvVGH2SCA==",
+    "python/iqpilot_private/navd/web_server.cpython-312-aarch64-linux-gnu.so": "8oTvgKJSZCJgOXmzOs/gVm1i+NGYKzJcgqqGYIaHkLX86HlW38yXdgdXeLd9LOOwo7txhr43KiPxeWaJe9bFAw=="
   }
 }

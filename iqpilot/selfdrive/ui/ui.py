@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import ctypes
+import gc
 import os
 import time
 import pyray as rl
@@ -14,6 +15,7 @@ from iqpilot.selfdrive.ui.ui_state import ui_state
 _FPS_OVERRIDE = os.getenv("FPS")
 UI_OFFROAD_FPS = int(os.getenv("UI_OFFROAD_FPS", _FPS_OVERRIDE or "60"))
 UI_ONROAD_FPS = int(os.getenv("UI_ONROAD_FPS", _FPS_OVERRIDE or "60"))
+UI_GC_INTERVAL_S = float(os.getenv("UI_GC_INTERVAL_S", "30"))
 
 
 def main():
@@ -45,6 +47,11 @@ def main():
       libc_trim = None
   last_trim = time.monotonic()
 
+  # config_realtime_process disables the collector, so reference cycles left by worker threads are only reclaimed here.
+  gc.collect()
+  gc.freeze()
+  last_collect = time.monotonic()
+
   for should_render in gui_app.render():
     ui_state.update()
     gui_app.set_target_fps(UI_ONROAD_FPS if ui_state.started else UI_OFFROAD_FPS)
@@ -58,6 +65,10 @@ def main():
           set_core_affinity(list(cores))
         except OSError:
           pass
+
+      if time.monotonic() - last_collect > UI_GC_INTERVAL_S:
+        gc.collect()
+        last_collect = time.monotonic()
 
       if libc_trim is not None and time.monotonic() - last_trim > 300.0:
         last_trim = time.monotonic()

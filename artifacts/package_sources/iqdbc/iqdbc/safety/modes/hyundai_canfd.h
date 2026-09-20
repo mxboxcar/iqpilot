@@ -107,12 +107,29 @@ const CanMsg HYUNDAI_CANFD_HDA2_LONG_TX_MSGS[] = {
   {0x4A3, 2, 8, .check_relay = false}, \
   {0x4B4, 2, 8, .check_relay = false}, \
 
+// The camera keeps running its own LFA/SCC logic behind the relay. It faults unless the
+// actuator feedback it sees follows its own request, so openpilot owns MDPS and the steering
+// touch sensor on the camera bus and the stock frames are blocked from being forwarded there.
+#define HYUNDAI_CANFD_HDA1_CAMERA_SCC_EXTRA_TX_MSGS \
+  {0x0EA, 2, 24, .check_relay = true}, \
+  {0x2AF, 2, 8, .check_relay = true}, \
+
 const CanMsg HYUNDAI_CANFD_HDA1_TX_MSGS[] = {
   HYUNDAI_CANFD_HDA1_TX_MSGS_COMMON(false)
 };
 
 const CanMsg HYUNDAI_CANFD_HDA1_LONG_TX_MSGS[] = {
   HYUNDAI_CANFD_HDA1_TX_MSGS_COMMON(true)
+};
+
+const CanMsg HYUNDAI_CANFD_HDA1_CAMERA_SCC_TX_MSGS[] = {
+  HYUNDAI_CANFD_HDA1_TX_MSGS_COMMON(false)
+  HYUNDAI_CANFD_HDA1_CAMERA_SCC_EXTRA_TX_MSGS
+};
+
+const CanMsg HYUNDAI_CANFD_HDA1_CAMERA_SCC_LONG_TX_MSGS[] = {
+  HYUNDAI_CANFD_HDA1_TX_MSGS_COMMON(true)
+  HYUNDAI_CANFD_HDA1_CAMERA_SCC_EXTRA_TX_MSGS
 };
 
 
@@ -505,8 +522,13 @@ static safety_config hyundai_canfd_init(uint16_t param) {
             else ret = BUILD_SAFETY_CFG(hyundai_canfd_hda2_long_rx_checks, HYUNDAI_CANFD_HDA2_LONG_TX_MSGS);
         }
     } else {
-      ret = hyundai_canfd_alt_buttons ? BUILD_SAFETY_CFG(hyundai_canfd_long_alt_buttons_rx_checks, HYUNDAI_CANFD_HDA1_LONG_TX_MSGS) : \
-                                        BUILD_SAFETY_CFG(hyundai_canfd_long_rx_checks, HYUNDAI_CANFD_HDA1_LONG_TX_MSGS);
+      if (hyundai_camera_scc) {
+        ret = hyundai_canfd_alt_buttons ? BUILD_SAFETY_CFG(hyundai_canfd_long_alt_buttons_rx_checks, HYUNDAI_CANFD_HDA1_CAMERA_SCC_LONG_TX_MSGS) : \
+                                          BUILD_SAFETY_CFG(hyundai_canfd_long_rx_checks, HYUNDAI_CANFD_HDA1_CAMERA_SCC_LONG_TX_MSGS);
+      } else {
+        ret = hyundai_canfd_alt_buttons ? BUILD_SAFETY_CFG(hyundai_canfd_long_alt_buttons_rx_checks, HYUNDAI_CANFD_HDA1_LONG_TX_MSGS) : \
+                                          BUILD_SAFETY_CFG(hyundai_canfd_long_rx_checks, HYUNDAI_CANFD_HDA1_LONG_TX_MSGS);
+      }
     }
   } else {
     if (hyundai_canfd_hda2 && hyundai_camera_scc) {
@@ -559,8 +581,8 @@ static safety_config hyundai_canfd_init(uint16_t param) {
         HYUNDAI_CANFD_SCC_ADDR_CHECK(2)
       };
 
-      ret = hyundai_canfd_alt_buttons ? BUILD_SAFETY_CFG(hyundai_canfd_alt_buttons_rx_checks, HYUNDAI_CANFD_HDA1_TX_MSGS) : \
-                                        BUILD_SAFETY_CFG(hyundai_canfd_rx_checks, HYUNDAI_CANFD_HDA1_TX_MSGS);
+      ret = hyundai_canfd_alt_buttons ? BUILD_SAFETY_CFG(hyundai_canfd_alt_buttons_rx_checks, HYUNDAI_CANFD_HDA1_CAMERA_SCC_TX_MSGS) : \
+                                        BUILD_SAFETY_CFG(hyundai_canfd_rx_checks, HYUNDAI_CANFD_HDA1_CAMERA_SCC_TX_MSGS);
     }
   }
 

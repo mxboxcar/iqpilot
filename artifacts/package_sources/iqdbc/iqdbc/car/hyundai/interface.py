@@ -110,8 +110,6 @@ class CarInterface(CarInterfaceBase):
         if 0x1cf not in fingerprint[CAN.ECAN]:
           ret.flags |= HyundaiFlags.CANFD_ALT_BUTTONS.value
           print("$$$CANFD ALT_BUTTONS")
-        if not ret.flags & HyundaiFlags.RADAR_SCC:
-          ret.flags |= HyundaiFlags.CANFD_CAMERA_SCC.value
         #if not ret.flags & HyundaiFlags.RADAR_SCC:
         #  ret.flags |= HyundaiFlags.CANFD_CAMERA_SCC.value
         #  print("$$$CANFD CAMERA_SCC")

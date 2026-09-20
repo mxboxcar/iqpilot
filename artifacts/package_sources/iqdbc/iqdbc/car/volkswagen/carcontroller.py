@@ -18,7 +18,7 @@ from iqdbc.car.volkswagen.pq_radar_handler import PQRadarHandler
 from iqdbc.car.volkswagen.values import (
   CanBus, CarControllerParams, MQB_A0_CARS, VolkswagenFlags, VolkswagenFlagsIQ, apply_pq_stopping_accel,
 )
-from iqdbc.car.volkswagen.mebutils import LongControlJerk, LongControlLimit, LatControlCurvature
+from iqdbc.car.volkswagen.mebutils import LongControlJerk, LongControlLimit, LatControlCurvature, LongStopHold
 from iqdbc.car.vehicle_model import VehicleModel
 
 iqpilot_path = os.path.join(os.path.dirname(__file__), '..', '..', '..')
@@ -249,6 +249,7 @@ class CarController(CarControllerBase):
     self.steering_power_last = 0
     self.long_jerk_control = LongControlJerk(dt=(DT_CTRL * self.CCP.ACC_CONTROL_STEP)) if self.CP.flags & (VolkswagenFlags.MEB | VolkswagenFlags.MQB_EVO) else None
     self.long_limit_control = LongControlLimit(dt=(DT_CTRL * self.CCP.ACC_CONTROL_STEP)) if self.CP.flags & (VolkswagenFlags.MEB | VolkswagenFlags.MQB_EVO) else None
+    self.long_stop_hold = LongStopHold(dt=(DT_CTRL * self.CCP.ACC_CONTROL_STEP)) if self.CP.flags & (VolkswagenFlags.MEB | VolkswagenFlags.MQB_EVO) else None
     self.gra_acc_counter_last = None
     self.gra_cancel_ticks = 0
     self.motor3_frame_last = None
@@ -499,11 +500,13 @@ class CarController(CarControllerBase):
     if self.frame % self.CCP.ACC_CONTROL_STEP == 0 and self.CP.openpilotLongitudinalControl and not CS.out.radarDisableFailed:
       stopping = actuators.longControlState == LongCtrlState.stopping
       if self.CP.flags & (VolkswagenFlags.MEB | VolkswagenFlags.MQB_EVO):
+        long_override = CC.cruiseControl.override or CS.out.gasPressed
         starting = mebcan.acc_starting(CC.longActive, actuators.longControlState, actuators.accel,
-                                       CS.esp_hold_confirmation, CS.out.vEgo, CC.cruiseControl.override or CS.out.gasPressed)
+                                       CS.esp_hold_confirmation, CS.out.vEgo, long_override)
         accel = float(np.clip(actuators.accel, self.CCP.ACCEL_MIN, self.CCP.ACCEL_MAX) if CC.enabled else 0)
 
-        long_override = CC.cruiseControl.override or CS.out.gasPressed
+        stopping, starting, esp_hold, accel = self.long_stop_hold.update(
+          CC.longActive, stopping, starting, accel, CS.esp_hold_confirmation, CS.out.vEgo, long_override)
 
 
         critical_state = hud_control.visualAlert == VisualAlert.fcw
@@ -514,7 +517,7 @@ class CarController(CarControllerBase):
         acc_control = self.CCS.acc_control_value(CS.out.cruiseState.available, CS.out.accFaulted, CC.enabled, long_override)
         acc_hold_type, self.acc_hold_ramp_counter = self.CCS.acc_hold_type(
           CS.out.cruiseState.available, CS.out.accFaulted, CC.enabled, starting, stopping,
-          CS.esp_hold_confirmation, CS.out.vEgo, self.acc_hold_type_last, self.acc_hold_ramp_counter)
+          esp_hold, CS.out.vEgo, self.acc_hold_type_last, self.acc_hold_ramp_counter)
         self.acc_hold_type_last = acc_hold_type
         can_sends.extend(self.CCS.create_acc_accel_control(
           self.packer_pt, self.CAN.pt, self.CP, CS.acc_type, CC.enabled,
@@ -522,7 +525,7 @@ class CarController(CarControllerBase):
           self.long_jerk_control.get_jerk_down() if CC.longComfortMode and self.long_jerk_control is not None else 4.0,
           self.long_limit_control.get_upper_limit() if CC.longComfortMode and self.long_limit_control is not None else 0.,
           self.long_limit_control.get_lower_limit() if CC.longComfortMode and self.long_limit_control is not None else 0.,
-          accel, acc_control, acc_hold_type, stopping, starting, CS.esp_hold_confirmation,
+          accel, acc_control, acc_hold_type, stopping, starting, esp_hold,
           CS.out.vEgoRaw * CV.MS_TO_KPH, long_override, CS.travel_assist_available,
         ))
         self.accel_last = accel
@@ -676,7 +679,8 @@ class CarController(CarControllerBase):
       stock_cancel_pressed = bool(CS.gra_stock_values["GRA_Abbrechen"])
 
     cancel_cmd = stock_cancel_pressed or self._tap_gra_cancel(CC.cruiseControl.cancel, gra_send_ready)
-    resume_cmd = CC.cruiseControl.resume or self._should_spam_mqb_a0_resume(CS, iq_mqb_acc_resume)
+    stalk_resume_allowed = not (self.CP.openpilotLongitudinalControl and self.CP.flags & (VolkswagenFlags.MEB | VolkswagenFlags.MQB_EVO))
+    resume_cmd = (CC.cruiseControl.resume and stalk_resume_allowed) or self._should_spam_mqb_a0_resume(CS, iq_mqb_acc_resume)
     if gra_send_ready and (cancel_cmd or resume_cmd):
       stalk_on_powertrain = self.CP.flags & VolkswagenFlags.PQ or self.CP.flags & VolkswagenFlagsIQ.IQ_MLB_NO_ECAN
       bus_send = self.CAN.aux if stalk_on_powertrain else self.CAN.ext

@@ -54,6 +54,9 @@ TILE_SCALE = int(os.getenv("IQPILOT_NAV_TILE_SCALE", "2"))
 # are left untouched. Set to TILE_SCALE to keep full @2x resolution.
 TILE_TEXTURE_SCALE = float(os.getenv("IQPILOT_NAV_TILE_TEXTURE_SCALE", "1.75"))
 MAX_INFLIGHT_TILES = 8
+TILE_RETRY_BASE_S = 2.0
+TILE_RETRY_MAX_S = 60.0
+TILE_RETRY_LIMIT = 512
 CAMERA_SMOOTHING = 0.18
 # Cache the map presentation independently of the 60 FPS onroad UI.
 PANEL_RENDER_FPS = max(1, int(os.getenv("IQPILOT_NAV_PANEL_FPS", "12")))
@@ -196,6 +199,36 @@ class TexturePool:
     self._free_count = 0
 
 
+class TileRetryGate:
+  def __init__(self, base_s: float = TILE_RETRY_BASE_S, max_s: float = TILE_RETRY_MAX_S, limit: int = TILE_RETRY_LIMIT):
+    self._base_s = base_s
+    self._max_s = max_s
+    self._limit = limit
+    self._lock = threading.Lock()
+    self._entries: dict[tuple[int, int, int], tuple[int, float]] = {}
+
+  def failed(self, tile_key: tuple[int, int, int]) -> None:
+    with self._lock:
+      failures = self._entries.pop(tile_key, (0, 0.0))[0] + 1
+      delay = min(self._max_s, self._base_s * 2 ** (failures - 1))
+      self._entries[tile_key] = (failures, time.monotonic() + delay)
+      while len(self._entries) > self._limit:
+        del self._entries[next(iter(self._entries))]
+
+  def loaded(self, tile_key: tuple[int, int, int]) -> None:
+    with self._lock:
+      self._entries.pop(tile_key, None)
+
+  def blocked(self, tile_key: tuple[int, int, int]) -> bool:
+    with self._lock:
+      entry = self._entries.get(tile_key)
+    return entry is not None and time.monotonic() < entry[1]
+
+  def clear(self) -> None:
+    with self._lock:
+      self._entries.clear()
+
+
 class RasterTileProvider:
   def _stash_pending(self, tile_key: tuple[int, int, int], image, generation: int) -> None:
     """Store a decoded tile Image for upload, unloading any Image it displaces.
@@ -285,6 +318,7 @@ class MapboxTileProvider(RasterTileProvider):
     self._inflight: set[tuple[int, int, int]] = set()
     self._textures: dict[tuple[int, int, int], rl.Texture] = {}
     self._lock = threading.Lock()
+    self._retry = TileRetryGate()
     self._generation = 0
     self._status = "idle"
     self._viewport_complete = False
@@ -336,9 +370,11 @@ class MapboxTileProvider(RasterTileProvider):
       # Decode + downscale here on the worker thread (pure CPU/stb, no GL), so the render
       # thread only pays the cheap GPU upload in _consume_pending.
       self._stash_pending(tile_key, _decode_tile_image(response.content), generation)
+      self._retry.loaded(tile_key)
       self._set_status("ready", generation)
     except (requests.RequestException, ValueError):
       if not self._queue_cached_tile(tile_key, inline=True, generation=generation):
+        self._retry.failed(tile_key)
         self._set_status("error", generation)
     finally:
       self._inflight.discard(tile_key)
@@ -363,7 +399,7 @@ class MapboxTileProvider(RasterTileProvider):
       return True
     # The render-thread path defers when the tile is already being fetched/decoded; the inline
     # (network-error fallback) path owns its own _inflight entry, so it must not short-circuit here.
-    if not inline and tile_key in self._inflight:
+    if not inline and (tile_key in self._inflight or self._retry.blocked(tile_key)):
       return True
 
     cache_path = self._cache_path(tile_key)
@@ -397,7 +433,7 @@ class MapboxTileProvider(RasterTileProvider):
       payload = cache_path.read_bytes()
       self._stash_pending(tile_key, _decode_tile_image(payload), generation)
     except (OSError, ValueError):
-      pass
+      self._retry.failed(tile_key)
     finally:
       self._inflight.discard(tile_key)
 
@@ -483,6 +519,7 @@ class MapboxTileProvider(RasterTileProvider):
     missing_tiles = [
       tile_key for tile_key in visible_tiles
       if tile_key not in self._textures and tile_key not in self._inflight and tile_key not in self._pending_tiles
+      and not self._retry.blocked(tile_key)
     ]
     missing_tiles.sort(key=lambda tile_key: abs(tile_key[1] - center_tile_x) + abs(tile_key[2] - center_tile_y))
     if token:
@@ -586,6 +623,7 @@ class MapboxTileProvider(RasterTileProvider):
       self._pending_tiles.clear()
     for image in pending_images:
       rl.unload_image(image)
+    self._retry.clear()
     self._status = "idle"
     self._viewport_complete = False
 
@@ -607,6 +645,7 @@ class OsmOfflineProvider(RasterTileProvider):
     self._pending_tiles: dict[tuple[int, int, int], Any] = {}
     self._inflight: set[tuple[int, int, int]] = set()
     self._lock = threading.Lock()
+    self._retry = TileRetryGate()
     self._generation = 0
     self._textures: dict[tuple[int, int, int], rl.Texture] = {}
     self._status = "offline_missing"
@@ -631,6 +670,7 @@ class OsmOfflineProvider(RasterTileProvider):
       self._pending_tiles.clear()
     for image in pending_images:
       rl.unload_image(image)
+    self._retry.clear()
 
   def _refresh_source(self, latitude: float, longitude: float) -> None:
     mbtiles_path = find_offline_mbtiles_path(latitude, longitude, day=self._day_mode)
@@ -692,10 +732,13 @@ class OsmOfflineProvider(RasterTileProvider):
       if generation != self._generation:
         return
       payload = self._load_blob(tile_key)
-      if payload is not None:
+      if payload is None:
+        self._retry.failed(tile_key)
+      else:
         self._stash_pending(tile_key, _decode_tile_image(payload), generation)
+        self._retry.loaded(tile_key)
     except Exception:
-      pass
+      self._retry.failed(tile_key)
     finally:
       self._inflight.discard(tile_key)
 
@@ -784,6 +827,7 @@ class OsmOfflineProvider(RasterTileProvider):
     missing_tiles = [
       tile_key for tile_key in visible_source
       if tile_key not in self._textures and tile_key not in self._inflight and tile_key not in self._pending_tiles
+      and not self._retry.blocked(tile_key)
     ]
 
     def _center_distance(tile_key: tuple[int, int, int]) -> float:
