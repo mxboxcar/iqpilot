@@ -61,11 +61,14 @@ def test_ev6_camera_scc_has_one_lfa_sender(monkeypatch, tmp_path):
   control.latActive = True
   control.actuators.torque = 0.01
 
+  seed_camera_frames(interface.CS)
+
   for _ in range(20):
     _, can_sends = interface.apply(control.as_reader(), structs.IQCarControl())
-    assert not [address for address, _, _ in can_sends if address in (0x12A, 0xEA, 0x2AF)]
+    assert [(address, bus) for address, _, bus in can_sends if address == 0x12A] == [(0x12A, 0)]
+    assert not [address for address, _, _ in can_sends if address in (0xEA, 0x2AF)]
 
-  seed_camera_frames(interface.CS)
+  interface.CC.camera_scc_feedback = True
 
   for _ in range(20):
     _, can_sends = interface.apply(control.as_reader(), structs.IQCarControl())

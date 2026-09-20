@@ -84,10 +84,19 @@ def steering_msgs(CP, CS, frame=0, lat_active=True, apply_steer=0, angle_control
                                              CS, 0.0, 0, angle_control), CAN
 
 
-def test_ev6_is_not_forced_to_camera_scc():
+def test_ev6_stays_camera_scc_so_the_scc_rx_check_stays_on_the_camera_bus():
   CP = ev6_params()
-  assert not CP.flags & HyundaiFlags.CANFD_CAMERA_SCC.value
+  assert CP.flags & HyundaiFlags.CANFD_CAMERA_SCC.value
   assert not CP.flags & HyundaiFlags.CANFD_HDA2.value
+
+
+def test_fingerprint_cannot_distinguish_the_camera_bus():
+  fingerprint = gen_empty_fingerprint()
+  for addr in (0x35, 0xA0, 0xEA, 0x125, 0x130, 0x175, 0x1CF, 0x12A, 0x1A0, 0x1E0):
+    fingerprint[0][addr] = 32
+    fingerprint[2][addr] = 32
+  CP = CarInterface.get_params(CAR.KIA_EV6, fingerprint, [], False, False, False)
+  assert CP.flags & HyundaiFlags.CANFD_CAMERA_SCC.value
 
 
 def test_camera_scc_steering_feeds_mdps_back_to_the_camera():

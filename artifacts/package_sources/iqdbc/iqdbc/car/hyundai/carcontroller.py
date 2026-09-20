@@ -188,6 +188,7 @@ class CarController(CarControllerBase):
     self.activeCarrot = 0
     self.camera_scc_params = Params().get_int("HyundaiCameraSCC")
     self.canfd_stopping = CanfdStopping() if Params().get_bool("CanfdStopRetry") else None
+    self.camera_scc_feedback = Params().get_bool("HyundaiCameraSccFeedback")
     self.is_ldws_car = Params().get_bool("IsLdwsCar")
     self.enable_corner_radar = 0
 
@@ -243,6 +244,7 @@ class CarController(CarControllerBase):
 
       self.canfd_debug = params.get_int("CanfdDebug")
       self.camera_scc_params = params.get_int("HyundaiCameraSCC")
+      self.camera_scc_feedback = params.get_bool("HyundaiCameraSccFeedback")
       self.enable_corner_radar = params.get_int("EnableCornerRadar")
 
     actuators = CC.actuators
@@ -465,7 +467,7 @@ class CarController(CarControllerBase):
       hda2 = self.CP.flags & HyundaiFlags.CANFD_HDA2
       hda2_long = hda2 and self.CP.openpilotLongitudinalControl
       # steering control
-      if camera_scc:
+      if camera_scc and self.camera_scc_feedback:
         can_sends.extend(hyundaicanfd.create_steering_messages_camera_scc(
           self.frame, self.packer, self.CP, self.CAN, CC, apply_steer_req, apply_torque,
           CS, apply_angle, self.lkas_max_torque, angle_control,
