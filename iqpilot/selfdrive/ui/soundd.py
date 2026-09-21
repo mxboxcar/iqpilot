@@ -61,6 +61,20 @@ sound_list: dict[int, tuple[str, int | None, float]] = {
   **sound_list_iq,
 }
 
+# Non-critical alerts to silence: engagement feedback chimes and soft prompts.
+# Safety-critical alerts (warningSoft, warningImmediate, promptDistracted) are
+# deliberately excluded so takeover and driver-monitoring warnings always play.
+# The sounds are still loaded and shown visually; only their audio is suppressed.
+MUTED_ALERTS: frozenset[int] = frozenset({
+  AudibleAlert.engage,
+  AudibleAlert.disengage,
+  AudibleAlert.refuse,
+  AudibleAlert.prompt,
+  AudibleAlert.promptRepeat,
+  AudibleAlertIQ.promptSingleLow,
+  AudibleAlertIQ.promptSingleHigh,
+})
+
 def check_selfdrive_timeout_alert(sm):
   ss_missing = time.monotonic() - sm.recv_time['selfdriveState']
 
@@ -110,6 +124,10 @@ class Soundd(AlertSoundFilter):
   def get_sound_data(self, frames): # get "frames" worth of data from the current alert sound, looping when required
 
     ret = np.zeros(frames, dtype=np.float32)
+
+    # Suppress non-critical alert audio while keeping safety-critical warnings.
+    if self.current_alert in MUTED_ALERTS:
+      return ret
 
     if self.permits(self.current_alert):
       num_loops = sound_list[self.current_alert][1]
