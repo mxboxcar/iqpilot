@@ -81,8 +81,8 @@
   },
   "python/_iqclosure/iqpilot/common/realtime.py": {
     "mode": 420,
-    "sha256": "f137ef62c1602a1f7c329731883dc518c62288bd25596891858d460ae3209ae2",
-    "size": 3966
+    "sha256": "016be524079ef32df03b2c135eab8f83da60a46fc7f143620b836c65f33e39a3",
+    "size": 4423
   },
   "python/_iqclosure/iqpilot/common/spinner.py": {
     "mode": 420,
@@ -246,8 +246,8 @@
   },
   "python/_iqclosure/iqpilot/selfdrive/iqmodeld/messaging.py": {
     "mode": 420,
-    "sha256": "294196c554b0a4a2ee45e0e76aef12c75008afd4f250ed3b80773843e91a615a",
-    "size": 13354
+    "sha256": "0022432af9de05936c789adda021f6a6c74738b32462c8293d158a2de609e6ad",
+    "size": 13819
   },
   "python/_iqclosure/iqpilot/selfdrive/iqmodeld/metadata.py": {
     "mode": 420,
@@ -576,37 +576,37 @@
   },
   "python/iqpilot_private/emac/bulk_transport.cpython-312-aarch64-linux-gnu.so": {
     "mode": 493,
-    "sha256": "513ef14b66c5c4f02f5db69e20a1ee808dc76081481c226c4f633c194aadbf65",
+    "sha256": "c5833113f02944e173ac5acc2347af00fb77e94d77e45d4e4c111c4ea7e703dd",
     "size": 399864
   },
   "python/iqpilot_private/emac/ffs_holder.cpython-312-aarch64-linux-gnu.so": {
     "mode": 493,
-    "sha256": "995ddda3a2a346751fbca4b47598b765f5e9ca2783c7e8b5bd093a1e20ccd752",
+    "sha256": "3fbfacb53637ecd7bf84d86bb09186aa6031bbd2bdbbe5546b11f4d0726614d5",
     "size": 68152
   },
   "python/iqpilot_private/emac/mac_client.cpython-312-aarch64-linux-gnu.so": {
     "mode": 493,
-    "sha256": "721eda2ef6a7fd11e0b9c50f319a68209297b827e9b59e59c2f2f4ec3537a041",
+    "sha256": "dd2fcdd11bb6a976cb6ca36ba5421309a0b1e58e3074f9a730730ce98fbff1e1",
     "size": 333552
   },
   "python/iqpilot_private/emac/mac_protocol.cpython-312-aarch64-linux-gnu.so": {
     "mode": 493,
-    "sha256": "53fcdcc4c959dd1c1f9fb9594da448f95cecb50187b8a102b515c1e9ea68077e",
-    "size": 474592
+    "sha256": "b4254dcff6a5d960a4b522d663bcf1dda932cb5b7e0f1867acf53737f99dc788",
+    "size": 475456
   },
   "python/iqpilot_private/emac/maciqmodeld.cpython-312-aarch64-linux-gnu.so": {
     "mode": 493,
-    "sha256": "70f8bf1d7e87ed7bb25103afe8509202287c95648e14fe76436a3d6c02b04d4c",
+    "sha256": "e8e492b37f714db9c55e2ebb4ff84b0be3094dae68970ea9c0c4bbccc08d1c40",
     "size": 597800
   },
   "python/iqpilot_private/emac/model_context.cpython-312-aarch64-linux-gnu.so": {
     "mode": 493,
-    "sha256": "a99170ba243cd3f3cf6b444358c9642ac7275bf5b1c1742a09672a09415a689a",
+    "sha256": "2c69684d6389bd54c250efd8add5e1d887e484dab0410ad9f6ee13b783e4d8cf",
     "size": 473440
   },
   "python/iqpilot_private/emac/rh_images.cpython-312-aarch64-linux-gnu.so": {
     "mode": 493,
-    "sha256": "7993d01d36eafe9d44eb859da1ab3b1206430b157ba6c7a114c25d7a9778737e",
+    "sha256": "1de43679b6842326a08208f573fe02a337c10328349e7ac4cd923664175d10b1",
     "size": 206032
   },
   "runtime": {
@@ -618,12 +618,12 @@
     }
   },
   "signatures": {
-    "python/iqpilot_private/emac/bulk_transport.cpython-312-aarch64-linux-gnu.so": "Kr46Kpj6t8xla92valvXs4M3oBa3FcNZNpiyucENroDeEzxGgaKN5/GsQQs89tEH3AaUVBaG2rE0G/67EzAWBA==",
-    "python/iqpilot_private/emac/ffs_holder.cpython-312-aarch64-linux-gnu.so": "s15qoYL2f5EW8HSoVmhCvNR4yChNXUt/oQ3mk7pwx35/mdFaweB3XR7WnXopzU8U93d40SrM8NO4IpAQBHOoCA==",
-    "python/iqpilot_private/emac/mac_client.cpython-312-aarch64-linux-gnu.so": "psIiLTiqHKzOIJmsHuN84yWsgP8V0Swvdo/qC7xJ7Vy19jYN06gmFP+cd1DOXpVhRue+JLroNkIHgN43aASOCg==",
-    "python/iqpilot_private/emac/mac_protocol.cpython-312-aarch64-linux-gnu.so": "A+LcTsESsAqnNIIMQMhJnZ9Dc3QYl5XXFBI0I2NSmODyu6z9uEx5UP+lQ4RGoZvmZ+QKlQWgJuu4HERvnEBsBA==",
-    "python/iqpilot_private/emac/maciqmodeld.cpython-312-aarch64-linux-gnu.so": "F2DZv5f88cpydjCW/l+2G2KPtUYad9/nH/8WCFybFDpfk+/FZHjUDPsIRLK8Koc0bhCDZIkUP+UxeU/H4ztsDg==",
-    "python/iqpilot_private/emac/model_context.cpython-312-aarch64-linux-gnu.so": "fpig3qnw8rNiaMOVAX1IOhckyO0qy5fSs5vCZubElLuqBzH+Xoe6b82KpuBrSPjRQoCphKBsVCKBWRr8LeBsBA==",
-    "python/iqpilot_private/emac/rh_images.cpython-312-aarch64-linux-gnu.so": "PUQz4+yztqWLTHe/AJeW+2j0dT+wgSjKifMuj+Af8YUF9tYcvNRyZTyjc9QxwImOgS9obhd0P3Ldu1YSBBmrBA=="
+    "python/iqpilot_private/emac/bulk_transport.cpython-312-aarch64-linux-gnu.so": "NKzVsBy23sEAkRO/DWNNBPeLbe8+MjDlzhwXH8BWBPAwp7UO2zhM3dSA0unzIJ8211o93ZAlQwhkg5eKzjhNDg==",
+    "python/iqpilot_private/emac/ffs_holder.cpython-312-aarch64-linux-gnu.so": "UYY8WzezWUZs0Jpy5HE5Ix/XBD3MzCQ4WgNdAkRcN/ORTtLV7w8Sdb7y/pQjDGVIriIAUaN9xO1A5j2dJQdwDg==",
+    "python/iqpilot_private/emac/mac_client.cpython-312-aarch64-linux-gnu.so": "D9bLBv7gswdFPdRQRwjs+7xOskepzodGWrIOlqRfszdC1TKQqxa+e0S5JTjOzsIIlZonSrRhgYYpulsXfboNAw==",
+    "python/iqpilot_private/emac/mac_protocol.cpython-312-aarch64-linux-gnu.so": "NTOyf/EfX2dNeCb5G5GgARQkivx4dsvtwr5jjiMZf1+nz5z5Ue+yR+sdvIJqzrDyXslyQs7ym8y9Y37UXWkqBg==",
+    "python/iqpilot_private/emac/maciqmodeld.cpython-312-aarch64-linux-gnu.so": "KE/shS+KcoYEFQXFBwdqFJ4XDZWTxOt2dInUo+zaVNhROlTdrzkbv5PhT+RM+jTobFX53HaaS0Z9E5JjNGcsCg==",
+    "python/iqpilot_private/emac/model_context.cpython-312-aarch64-linux-gnu.so": "KPbRHMGKY1idm+VPI301wNrS3ZTemglhD7jre4NYVxyLYEHw3cxox/AKnYHHVAbpwH9GaAe6Ooenh3TnbPIPBw==",
+    "python/iqpilot_private/emac/rh_images.cpython-312-aarch64-linux-gnu.so": "dQCDjqhUKhO0UY3nmrO/9WpmH+rNvX2tAJMIKFQcr+8EJd6WOyDnCwhZ+lSw/VomOzNFj1PZFd+SjhjExEr3Cg=="
   }
 }

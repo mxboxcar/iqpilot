@@ -98,8 +98,8 @@ def test_canfd_camera_scc_single_owner_forwarding(safety):
   assert safety.safety_fwd_hook(2, 0x12A) == -1
   assert safety.safety_fwd_hook(2, 0x1E0) == -1
   assert safety.safety_fwd_hook(2, 0x1A0) == 0
-  assert safety.safety_fwd_hook(0, 0xEA) == -1
-  assert safety.safety_fwd_hook(0, 0x2AF) == -1
+  assert safety.safety_fwd_hook(0, 0xEA) == 2
+  assert safety.safety_fwd_hook(0, 0x2AF) == 2
   assert safety.safety_tx_hook(packet(0xEA, 2, 24))
   assert safety.safety_tx_hook(packet(0x2AF, 2, 8))
   assert not safety.safety_tx_hook(packet(0xEA, 0, 24))
@@ -115,8 +115,8 @@ def test_canfd_camera_scc_longitudinal_single_owner_forwarding(safety):
   assert safety.safety_fwd_hook(2, 0x12A) == -1
   assert safety.safety_fwd_hook(2, 0x1A0) == -1
   assert safety.safety_fwd_hook(0, 0x175) == -1
-  assert safety.safety_fwd_hook(0, 0xEA) == -1
-  assert safety.safety_fwd_hook(0, 0x2AF) == -1
+  assert safety.safety_fwd_hook(0, 0xEA) == 2
+  assert safety.safety_fwd_hook(0, 0x2AF) == 2
   assert safety.safety_tx_hook(packet(0xEA, 2, 24))
   assert safety.safety_tx_hook(packet(0x2AF, 2, 8))
 

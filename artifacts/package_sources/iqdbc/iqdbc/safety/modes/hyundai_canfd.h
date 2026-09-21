@@ -107,12 +107,12 @@ const CanMsg HYUNDAI_CANFD_HDA2_LONG_TX_MSGS[] = {
   {0x4A3, 2, 8, .check_relay = false}, \
   {0x4B4, 2, 8, .check_relay = false}, \
 
-// The camera keeps running its own LFA/SCC logic behind the relay. It faults unless the
-// actuator feedback it sees follows its own request, so openpilot owns MDPS and the steering
-// touch sensor on the camera bus and the stock frames are blocked from being forwarded there.
+// The camera keeps running its own LFA/SCC logic behind the relay and needs actuator feedback.
+// check_relay stays false so the stock MDPS keeps being forwarded to the camera; openpilot's
+// copy is additive, matching the upstream port. Blocking the forward starves the camera.
 #define HYUNDAI_CANFD_HDA1_CAMERA_SCC_EXTRA_TX_MSGS \
-  {0x0EA, 2, 24, .check_relay = true}, \
-  {0x2AF, 2, 8, .check_relay = true}, \
+  {0x0EA, 2, 24, .check_relay = false}, \
+  {0x2AF, 2, 8, .check_relay = false}, \
 
 const CanMsg HYUNDAI_CANFD_HDA1_TX_MSGS[] = {
   HYUNDAI_CANFD_HDA1_TX_MSGS_COMMON(false)
