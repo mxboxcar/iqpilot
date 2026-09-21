@@ -73,6 +73,9 @@ MUTED_ALERTS: frozenset[int] = frozenset({
   AudibleAlert.promptRepeat,
   AudibleAlertIQ.promptSingleLow,
   AudibleAlertIQ.promptSingleHigh,
+  AudibleAlert.promptDistracted,
+  AudibleAlert.warningSoft,
+  AudibleAlert.warningImmediate,
 })
 
 def check_selfdrive_timeout_alert(sm):
