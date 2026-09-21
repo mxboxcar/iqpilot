@@ -61,10 +61,11 @@ sound_list: dict[int, tuple[str, int | None, float]] = {
   **sound_list_iq,
 }
 
-# Non-critical alerts to silence: engagement feedback chimes and soft prompts.
-# Safety-critical alerts (warningSoft, warningImmediate, promptDistracted) are
-# deliberately excluded so takeover and driver-monitoring warnings always play.
-# The sounds are still loaded and shown visually; only their audio is suppressed.
+# Full silence: every alert chime is suppressed, INCLUDING the safety-critical
+# takeover and driver-monitoring warnings (promptDistracted, warningSoft,
+# warningImmediate). This is a deliberate owner choice for this private fork;
+# the sounds are still loaded and shown visually on screen, so the driver relies
+# on the on-screen alerts alone. Remove an entry here to let its chime play again.
 MUTED_ALERTS: frozenset[int] = frozenset({
   AudibleAlert.engage,
   AudibleAlert.disengage,
