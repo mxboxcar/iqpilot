@@ -4,7 +4,7 @@ Copyright © IQ.Lvbs, apart of Project Teal Lvbs, All Rights Reserved, licensed 
 
 from iqpilot.selfdrive.ui.mici.widgets.stock_button import BigParamControl
 from iqpilot.selfdrive.ui.mici.layouts.settings.iq_widgets import MappedParamToggle
-from iqpilot.selfdrive.ui.ui_state import ui_state
+from iqpilot.selfdrive.ui.ui_state import ui_state, NIGHT_MODE_BASE
 from iqpilot.system.hardware import HARDWARE
 from iqpilot.system.ui.widgets.scroller import NavScroller
 from iqpilot.system.ui.lib.multilang import tr
@@ -12,8 +12,12 @@ from iqpilot.system.ui.lib.multilang import tr
 _BRIGHT_PERCENTS = [f"{p}%" for p in range(5, 101, 5)]
 _DISPLAY_BRIGHT_VALUES = [0] + list(range(5, 101, 5))
 
-_ONROAD_BRIGHT_OPTIONS = ["auto", "auto dark"] + _BRIGHT_PERCENTS
+# "day auto / night N%" options occupy values NIGHT_MODE_BASE.. (see ui_state.NIGHT_MODE_BASE)
+_NIGHT_BRIGHT_OPTIONS = [f"auto / night {p}%" for p in range(5, 101, 5)]
+
+_ONROAD_BRIGHT_OPTIONS = ["auto", "auto dark"] + _BRIGHT_PERCENTS + _NIGHT_BRIGHT_OPTIONS
 _ONROAD_BRIGHT_VALUES = list(range(len(_ONROAD_BRIGHT_OPTIONS)))
+assert _ONROAD_BRIGHT_OPTIONS.index(_NIGHT_BRIGHT_OPTIONS[0]) == NIGHT_MODE_BASE
 
 _DELAY_OPTIONS = ["15s", "30s", "1m", "2m", "3m", "4m", "5m", "6m", "7m", "8m", "9m", "10m"]
 _DELAY_VALUES = [15, 30, 60, 120, 180, 240, 300, 360, 420, 480, 540, 600]
@@ -29,7 +33,8 @@ class DisplayLayoutMici(NavScroller):
     self._display_bright = MappedParamToggle(tr("display brightness"), "Brightness",
                                              [tr("default")] + _BRIGHT_PERCENTS, _DISPLAY_BRIGHT_VALUES)
     self._onroad_bright = MappedParamToggle(tr("driving brightness"), "OnroadScreenOffBrightness",
-                                            [tr("auto"), tr("auto dark")] + _BRIGHT_PERCENTS, _ONROAD_BRIGHT_VALUES)
+                                            [tr("auto"), tr("auto dark")] + _BRIGHT_PERCENTS + _NIGHT_BRIGHT_OPTIONS,
+                                            _ONROAD_BRIGHT_VALUES)
     self._delay = MappedParamToggle(tr("brightness delay"), "OnroadScreenOffTimer",
                                     _DELAY_OPTIONS, _DELAY_VALUES)
     self._interact = MappedParamToggle(tr("interactivity"), "InteractivityTimeout",
@@ -44,12 +49,12 @@ class DisplayLayoutMici(NavScroller):
     for w in self._items:
       w.refresh()
     bval = int(float(ui_state.params.get("OnroadScreenOffBrightness", return_default=True) or 0))
-    self._delay.set_enabled(bval not in (0, 1))
+    self._delay.set_enabled(bval not in (0, 1) and bval < NIGHT_MODE_BASE)
 
   def _update_state(self):
     super()._update_state()
     bval = int(float(ui_state.params.get("OnroadScreenOffBrightness", return_default=True) or 0))
-    self._delay.set_enabled(bval not in (0, 1))
+    self._delay.set_enabled(bval not in (0, 1) and bval < NIGHT_MODE_BASE)
 
   def show_event(self):
     super().show_event()
