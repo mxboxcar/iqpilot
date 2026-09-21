@@ -17,6 +17,24 @@ def _aol_modes() -> list[str]:
   return [tr("stay engaged"), tr("standby"), tr("disengage")]
 
 
+# Manual lane position via the existing CameraOffset param (meters from lane centre,
+# positive = right). Kept within the daemon's ±0.35 m clamp with margin. Applied by
+# shearing the model camera input (iqmodeld), not by injecting curvature.
+_LANE_OFFSET_VALUES = [round(-0.30 + 0.05 * i, 2) for i in range(13)]  # -0.30 .. +0.30
+
+
+def _lane_offset_labels() -> list[str]:
+  labels = []
+  for v in _LANE_OFFSET_VALUES:
+    if v < 0:
+      labels.append(f"{tr('left')} {abs(v):.2f} m")
+    elif v > 0:
+      labels.append(f"{tr('right')} {v:.2f} m")
+    else:
+      labels.append(tr("centre"))
+  return labels
+
+
 class SabBrakeToggle(BigParamControl):
   """Driver-intervention toggle backed by AolSteeringMode == 2."""
   def __init__(self):
@@ -110,10 +128,12 @@ class SteeringLayoutMici(NavScroller):
     self._lane_change = BigButton(tr("lane change"))
     self._lane_change.set_click_callback(lambda: gui_app.push_widget(self._lc_panel))
     self._nnff = BigParamControl(tr("Neural Net FF"), "NeuralNetworkFeedForward", toggle_callback=self._on_nnff_toggled)
+    self._lane_offset = MappedParamToggle(tr("lane offset"), "CameraOffset",
+                                          _lane_offset_labels(), _LANE_OFFSET_VALUES)
 
     self._scroller.add_widgets([
       self._aol, self._sab_settings_button, self._lane_change,
-      self._nnff,
+      self._nnff, self._lane_offset,
     ])
 
   def _aol_mode_str(self) -> str:
@@ -144,6 +164,8 @@ class SteeringLayoutMici(NavScroller):
     self._aol.set_enabled(offroad)
     self._sab_settings_button.set_enabled(offroad and self._aol._checked)
     self._nnff.set_enabled(offroad and steering_supported)
+    self._lane_offset.refresh()
+    self._lane_offset.set_enabled(offroad)
 
   def _update_state(self):
     super()._update_state()
