@@ -18,18 +18,18 @@ def _aol_modes() -> list[str]:
 
 
 # Manual lane position via the existing CameraOffset param (meters from lane centre,
-# positive = right). Kept within the daemon's ±0.35 m clamp with margin. Applied by
+# NEGATIVE = right - shear sign is inverted; labels below flipped to match). Kept within the daemon's ±0.35 m clamp with margin. Applied by
 # shearing the model camera input (iqmodeld), not by injecting curvature.
-_LANE_OFFSET_VALUES = [round(-0.30 + 0.05 * i, 2) for i in range(13)]  # -0.30 .. +0.30
+_LANE_OFFSET_VALUES = [round(-0.02 * i, 2) for i in range(13)]  # lynx: 0.00..-0.24 step 0.02, NEGATIVE=RIGHT
 
 
 def _lane_offset_labels() -> list[str]:
   labels = []
   for v in _LANE_OFFSET_VALUES:
     if v < 0:
-      labels.append(f"{tr('left')} {abs(v):.2f} m")
+      labels.append(f"{tr('right')} {abs(v):.2f} m")
     elif v > 0:
-      labels.append(f"{tr('right')} {v:.2f} m")
+      labels.append(f"{tr('left')} {v:.2f} m")
     else:
       labels.append(tr("centre"))
   return labels
