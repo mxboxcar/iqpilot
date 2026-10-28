@@ -35,6 +35,15 @@ def _lane_offset_labels() -> list[str]:
   return labels
 
 
+# Model steering smoothing: ModelLatSmoothSec is an INT in centiseconds (0..30 -> 0.00..0.30 s).
+# Capped at 0.20 s here: more smoothing makes the wheel noticeably laggy. Needs ModelSmoothingEnabled=1.
+_SMOOTH_VALUES = [0, 4, 6, 8, 10, 13, 16, 20]
+
+
+def _smooth_labels() -> list[str]:
+  return [tr("off") if v == 0 else f"{v / 100:.2f} s" for v in _SMOOTH_VALUES]
+
+
 class SabBrakeToggle(BigParamControl):
   """Driver-intervention toggle backed by AolSteeringMode == 2."""
   def __init__(self):
@@ -130,10 +139,12 @@ class SteeringLayoutMici(NavScroller):
     self._nnff = BigParamControl(tr("Neural Net FF"), "NeuralNetworkFeedForward", toggle_callback=self._on_nnff_toggled)
     self._lane_offset = MappedParamToggle(tr("lane offset"), "CameraOffset",
                                           _lane_offset_labels(), _LANE_OFFSET_VALUES)
+    self._smoothing = MappedParamToggle(tr("steering smoothing"), "ModelLatSmoothSec",
+                                        _smooth_labels(), _SMOOTH_VALUES)
 
     self._scroller.add_widgets([
       self._aol, self._sab_settings_button, self._lane_change,
-      self._nnff, self._lane_offset,
+      self._nnff, self._lane_offset, self._smoothing,
     ])
 
   def _aol_mode_str(self) -> str:
@@ -166,6 +177,8 @@ class SteeringLayoutMici(NavScroller):
     self._nnff.set_enabled(offroad and steering_supported)
     self._lane_offset.refresh()
     self._lane_offset.set_enabled(offroad)
+    self._smoothing.refresh()
+    self._smoothing.set_enabled(offroad)
 
   def _update_state(self):
     super()._update_state()
