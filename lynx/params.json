@@ -4,5 +4,5 @@
   "ModelSmoothingEnabled": 1,
   "ModelLatSmoothSec": 8,
   "ShowBSMIndicators": 0,
-  "IQBlindSpotAlerts": 1
+  "IQBlindSpotAlerts": 0
 }
