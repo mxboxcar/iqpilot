@@ -1,0 +1,8 @@
+{
+  "_comment": "Applied by lynx-update.sh --apply-params (whitelisted keys only, car must be parked). CameraOffset NEGATIVE = right.",
+  "CameraOffset": -0.2,
+  "ModelSmoothingEnabled": 1,
+  "ModelLatSmoothSec": 8,
+  "ShowBSMIndicators": 0,
+  "IQBlindSpotAlerts": 1
+}
