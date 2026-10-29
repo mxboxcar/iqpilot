@@ -90,6 +90,9 @@ def get_T_FOLLOW(personality=log.LongitudinalPersonality.standard, v_ego=None):
     return base
   v = max(float(v_ego), 1.0)
   kmh = min(100.0, max(10.0, v * 3.6))
+  if personality == log.LongitudinalPersonality.aggressive:
+    # lynx: aggressive tightens further with speed: unchanged up to 60 km/h, 1.0/1.45 of the curve at 100 km/h (~1.5 s)
+    base -= 0.25 * min(1.0, max(0.0, (kmh - 60.0) / 40.0))
   headway = 0.000348 * kmh ** 2 - 0.03205 * kmh + 1.874
   return max(0.7, headway - STOP_DISTANCE / v) * base / 1.45
 
