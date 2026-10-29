@@ -4,6 +4,7 @@ Copyright © IQ.Lvbs, apart of Project Teal Lvbs, All Rights Reserved, licensed 
 
 from iqpilot.common.params import Params, UnknownKeyName
 from iqpilot.selfdrive.longitudinal_settings import (
+  LONGITUDINAL_MODE_CHILL,
   LONGITUDINAL_MODE_DYNAMIC,
   LONGITUDINAL_MODE_PILOT,
   LONGITUDINAL_MODE_STOCK,
@@ -118,7 +119,7 @@ class FollowDistanceSelector(BigMultiToggle):
     self.set_enabled(enabled)
 
   def _handle_mouse_release(self, mouse_pos):
-    if get_longitudinal_mode(self._params) not in (LONGITUDINAL_MODE_DYNAMIC, LONGITUDINAL_MODE_PILOT):
+    if get_longitudinal_mode(self._params) not in (LONGITUDINAL_MODE_CHILL, LONGITUDINAL_MODE_DYNAMIC, LONGITUDINAL_MODE_PILOT):
       return
     BigButton._handle_mouse_release(self, mouse_pos)
     selection, _ = get_follow_distance_state(self._params)
