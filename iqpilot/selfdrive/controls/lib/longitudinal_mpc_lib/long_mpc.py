@@ -91,8 +91,8 @@ def get_T_FOLLOW(personality=log.LongitudinalPersonality.standard, v_ego=None):
   v = max(float(v_ego), 1.0)
   kmh = min(100.0, max(10.0, v * 3.6))
   if personality == log.LongitudinalPersonality.aggressive:
-    # lynx: aggressive follows the owner's rule: 2.0 s gap at <=40 km/h, linear down to 1.0 s at 100 km/h
-    gap = 2.0 - 1.0 * min(1.0, max(0.0, (kmh - 40.0) / 60.0))
+    # lynx: aggressive follows the owner's rule: 2.0 s gap at <=20 km/h, 1.5 s at 40 km/h, linear down to 0.8 s at 100 km/h
+    gap = 1.5 + 0.5 * min(1.0, max(0.0, (40.0 - kmh) / 20.0)) - 0.7 * min(1.0, max(0.0, (kmh - 40.0) / 60.0))
     return max(0.7, gap - STOP_DISTANCE / v)
   headway = 0.000348 * kmh ** 2 - 0.03205 * kmh + 1.874
   return max(0.7, headway - STOP_DISTANCE / v) * base / 1.45
