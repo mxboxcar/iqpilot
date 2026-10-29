@@ -81,12 +81,17 @@ def _t_follow_base(personality):
 
 
 def get_T_FOLLOW(personality=log.LongitudinalPersonality.standard, v_ego=None):
-  # lynx: speed-based follow time. 'relaxed' = 1.0 s @ 5 km/h -> 2.5 s @ 100 km/h (clamped outside);
-  # standard / aggressive keep their ratio to relaxed (1.45/1.75 and 1.25/1.75).
+  # lynx: speed-based follow time fitted to the owner's own manual following (measured 2026-10-29).
+  # Effective headway H(v) = 0.000348*kmh**2 - 0.03205*kmh + 1.874 s with kmh clamped to 10..100.
+  # The MPC adds STOP_DISTANCE on top of T*v, so T = H - STOP_DISTANCE/v (floored at 0.7 s) reproduces H.
+  # 'standard' is exactly that curve; relaxed / aggressive scale it by 1.75/1.45 and 1.25/1.45.
   base = _t_follow_base(personality)
   if v_ego is None:
     return base
-  return float(np.interp(v_ego, [1.39, 27.78], [1.0, 2.5])) * base / 1.75
+  v = max(float(v_ego), 1.0)
+  kmh = min(100.0, max(10.0, v * 3.6))
+  headway = 0.000348 * kmh ** 2 - 0.03205 * kmh + 1.874
+  return max(0.7, headway - STOP_DISTANCE / v) * base / 1.45
 
 def get_stopped_equivalence_factor(v_lead):
   return (v_lead**2) / (2 * COMFORT_BRAKE)
