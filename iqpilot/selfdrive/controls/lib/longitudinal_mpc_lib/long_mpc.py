@@ -64,7 +64,7 @@ def get_jerk_factor(personality=log.LongitudinalPersonality.standard):
   elif personality==log.LongitudinalPersonality.standard:
     return 1.0
   elif personality==log.LongitudinalPersonality.aggressive:
-    return 1.0  # lynx: was 0.5 (harsh brake/throttle); aggressive now only changes the gap, not the smoothness
+    return 0.75  # lynx: stock 0.5 braked harshly, 1.0 let the gap collapse behind a slowing lead (seen in logs)
   else:
     raise NotImplementedError("Longitudinal personality not supported")
 
