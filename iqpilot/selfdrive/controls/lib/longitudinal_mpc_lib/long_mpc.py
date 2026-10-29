@@ -34,14 +34,14 @@ COST_E_DIM = 4
 COST_DIM = COST_E_DIM + 1
 CONSTR_DIM = 4
 
-X_EGO_OBSTACLE_COST = 3.
+X_EGO_OBSTACLE_COST = 5.  # lynx: stock 3; start easing off a slower lead earlier
 X_EGO_COST = 0.
 V_EGO_COST = 0.
 A_EGO_COST = 0.
 J_EGO_COST = 20.
 DANGER_ZONE_COST = 100.
 CRASH_DISTANCE = .25
-LEAD_DANGER_FACTOR = 0.75
+LEAD_DANGER_FACTOR = 0.9  # lynx: stock 0.75; tolerate less shortfall of the comfort gap before braking hard
 LIMIT_COST = 1e6
 ACADOS_SOLVER_TYPE = 'SQP_RTI'
 
