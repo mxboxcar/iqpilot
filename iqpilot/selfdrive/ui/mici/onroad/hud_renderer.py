@@ -268,12 +268,13 @@ class HudRenderer(Widget):
     )
 
   def _draw_current_speed(self, rect: rl.Rectangle) -> None:
-    """lynx: always-on compact current speed, top right."""
+    """lynx: always-on compact current speed, bottom right."""
     size = 80
     speed_text = str(round(self.speed))
     text_size = measure_text_cached(self._font_bold, speed_text, size)
     x = rect.x + rect.width - text_size.x - 24
-    rl.draw_text_ex(self._font_bold, speed_text, rl.Vector2(x, rect.y + 4), size, 0, COLORS.WHITE)
+    y = rect.y + rect.height - size - 36
+    rl.draw_text_ex(self._font_bold, speed_text, rl.Vector2(x, y), size, 0, COLORS.WHITE)
     unit_text = tr("km/h") if ui_state.is_metric else tr("mph")
     unit_size = measure_text_cached(self._font_medium, unit_text, 28)
-    rl.draw_text_ex(self._font_medium, unit_text, rl.Vector2(rect.x + rect.width - unit_size.x - 24, rect.y + size - 2), 28, 0, COLORS.WHITE_TRANSLUCENT)
+    rl.draw_text_ex(self._font_medium, unit_text, rl.Vector2(rect.x + rect.width - unit_size.x - 24, rect.y + rect.height - 36), 28, 0, COLORS.WHITE_TRANSLUCENT)
