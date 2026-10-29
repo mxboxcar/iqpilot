@@ -69,7 +69,7 @@ def get_jerk_factor(personality=log.LongitudinalPersonality.standard):
     raise NotImplementedError("Longitudinal personality not supported")
 
 
-def get_T_FOLLOW(personality=log.LongitudinalPersonality.standard):
+def _t_follow_base(personality):
   if personality==log.LongitudinalPersonality.relaxed:
     return 1.75
   elif personality==log.LongitudinalPersonality.standard:
@@ -78,6 +78,15 @@ def get_T_FOLLOW(personality=log.LongitudinalPersonality.standard):
     return 1.25
   else:
     raise NotImplementedError("Longitudinal personality not supported")
+
+
+def get_T_FOLLOW(personality=log.LongitudinalPersonality.standard, v_ego=None):
+  # lynx: speed-based follow time. 'relaxed' = 1.0 s @ 5 km/h -> 2.5 s @ 100 km/h (clamped outside);
+  # standard / aggressive keep their ratio to relaxed (1.45/1.75 and 1.25/1.75).
+  base = _t_follow_base(personality)
+  if v_ego is None:
+    return base
+  return float(np.interp(v_ego, [1.39, 27.78], [1.0, 2.5])) * base / 1.75
 
 def get_stopped_equivalence_factor(v_lead):
   return (v_lead**2) / (2 * COMFORT_BRAKE)
@@ -318,7 +327,7 @@ class LongitudinalMpc:
 
   def update(self, modelV2, radarstate, personality=log.LongitudinalPersonality.standard):
     self.new_lead_mpc = self._read_new_lead_mpc()
-    t_follow = get_T_FOLLOW(personality)
+    t_follow = get_T_FOLLOW(personality, self.x0[1])
     model_leads = modelV2.leadsV3
 
     if self.new_lead_mpc:

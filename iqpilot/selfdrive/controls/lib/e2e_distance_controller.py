@@ -62,7 +62,7 @@ class E2EDistanceController:
       v_ego = float(cs.vEgo)
       personality = sm['selfdriveState'].personality
       personality = int(getattr(personality, 'raw', personality))
-      t_follow = get_T_FOLLOW(personality)
+      t_follow = get_T_FOLLOW(personality, v_ego)
       self.state.targetTimeGap = t_follow
       model_v = np.asarray(md.velocity.x, dtype=float)
       if model_v.shape != (ModelConstants.IDX_N,) or not np.all(np.isfinite(model_v)) or not all(
