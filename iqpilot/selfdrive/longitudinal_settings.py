@@ -47,8 +47,7 @@ def apply_longitudinal_mode(params, mode: int) -> None:
   elif mode == LONGITUDINAL_MODE_CHILL:
     params.put_bool("AlphaLongitudinalEnabled", True)
     params.put_bool("ExperimentalMode", False)
-    params.put_bool("IQDynamicMode", False)
-    set_valid_personality(params, PERSONALITY_RELAXED)
+    params.put_bool("IQDynamicMode", False)  # lynx: Chill keeps the owner's follow-distance choice
   elif mode == LONGITUDINAL_MODE_DYNAMIC:
     params.put_bool("AlphaLongitudinalEnabled", True)
     params.put_bool("ExperimentalMode", True)
@@ -80,16 +79,9 @@ def get_follow_distance_state(params) -> tuple[int | None, bool]:
   if mode == LONGITUDINAL_MODE_STOCK:
     get_valid_personality(params)
     return None, False
-  if mode == LONGITUDINAL_MODE_CHILL:
-    if get_valid_personality(params) != PERSONALITY_RELAXED:
-      set_valid_personality(params, PERSONALITY_RELAXED)
-    return PERSONALITY_RELAXED, False
   return get_valid_personality(params), True
 
 
 def get_runtime_personality(params) -> int:
-  if get_longitudinal_mode(params) == LONGITUDINAL_MODE_CHILL:
-    if get_valid_personality(params) != PERSONALITY_RELAXED:
-      set_valid_personality(params, PERSONALITY_RELAXED)
-    return PERSONALITY_RELAXED
+  # lynx: Chill no longer forces 'relaxed'; the selected follow distance is used in every mode
   return get_valid_personality(params)
