@@ -61,6 +61,16 @@ sound_list: dict[int, tuple[str, int | None, float]] = {
   **sound_list_iq,
 }
 
+# lynx: all alert chimes are audible at normal volume (incl. engage/disengage and the
+# takeover / driver-monitoring warnings). Only lane-change alert sounds are suppressed,
+# matched by alert text (the blindspot chime reuses the generic 'prompt' sound).
+MUTED_ALERTS: frozenset[int] = frozenset()
+LANE_CHANGE_ALERT_KEYWORDS = ("lane change", "changing lanes", "blindspot")
+
+def is_lane_change_alert(text) -> bool:
+  t = (text or "").lower()
+  return any(k in t for k in LANE_CHANGE_ALERT_KEYWORDS)
+
 def check_selfdrive_timeout_alert(sm):
   ss_missing = time.monotonic() - sm.recv_time['selfdriveState']
 
@@ -110,6 +120,10 @@ class Soundd(AlertSoundFilter):
   def get_sound_data(self, frames): # get "frames" worth of data from the current alert sound, looping when required
 
     ret = np.zeros(frames, dtype=np.float32)
+
+    # Suppress non-critical alert audio while keeping safety-critical warnings.
+    if self.current_alert in MUTED_ALERTS:
+      return ret
 
     if self.permits(self.current_alert):
       num_loops = sound_list[self.current_alert][1]
@@ -193,6 +207,8 @@ class Soundd(AlertSoundFilter):
   def get_audible_alert(self, sm):
     if sm.updated['selfdriveState']:
       new_alert = sm['selfdriveState'].alertSound.raw
+      if is_lane_change_alert(sm['selfdriveState'].alertText1):
+        new_alert = AudibleAlert.none  # lynx: no sound for lane-change alerts
       self.update_alert(new_alert)
     elif check_selfdrive_timeout_alert(sm):
       self.update_alert(AudibleAlert.warningImmediate)

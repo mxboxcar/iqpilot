@@ -35,6 +35,14 @@ class OnroadTimerStatus(Enum):
   RESUME = 2
 
 
+# OnroadScreenOffBrightness values >= NIGHT_MODE_BASE select "day auto / night fixed":
+# follow the light sensor by day, and hold a fixed level after sunset. The night
+# percent is (value - NIGHT_MODE_BASE + 1) * 5, i.e. NIGHT_MODE_BASE -> 5% ... +19 -> 100%.
+# This reuses the existing (registered) param since new param keys can't be added without
+# rebuilding params_pyx.
+NIGHT_MODE_BASE = 22
+
+
 class IQUIState:
   def __init__(self):
     self.params = Params()
@@ -70,7 +78,7 @@ class IQUIState:
   @property
   def auto_onroad_brightness(self) -> bool:
     # Accept the retired value 1 as Auto; manual brightness keeps values 2–21.
-    return self.onroad_brightness in (0, 1)
+    return self.onroad_brightness in (0, 1) or self._night_bright_mode
 
   @staticmethod
   def guidance_phase(ss, ss_iq, onroad_evt) -> str:
@@ -115,9 +123,18 @@ class IQUIState:
       self.onroad_brightness_timer_param = 15
 
     self.render_preferences = RenderPreferences.read(self.params, has_active_model=bool(self.active_bundle))
-    self.is_night = self._compute_is_night() if self.night_mode else False
     self.onroad_brightness = int(float(self.params.get("OnroadScreenOffBrightness", return_default=True)))
-    if self.auto_onroad_brightness:
+    self._night_bright_mode = self.onroad_brightness >= NIGHT_MODE_BASE
+
+    # Night detection (sunset + GPS) is shared by NightMode theming and the day-auto/
+    # night-fixed brightness mode; compute it once, and only when something needs it.
+    is_night = self._compute_is_night() if (self.night_mode or self._night_bright_mode) else False
+    self.is_night = is_night if self.night_mode else False
+    self.brightness_is_night = is_night if self._night_bright_mode else False
+
+    if self._night_bright_mode:
+      delay = None
+    elif self.auto_onroad_brightness:
       delay = 15
     else:
       delay = max(0, self.onroad_brightness_timer_param)
@@ -144,6 +161,13 @@ class IQDevice:
   @staticmethod
   def set_onroad_brightness(_ui_state, awake: bool, cur_brightness: float) -> float:
     if not awake or not _ui_state.started:
+      return cur_brightness
+
+    # Day-auto / night-fixed mode: follow the light sensor by day, hold a fixed
+    # user-set level after sunset. Bypasses the inactivity dim timer (treated as auto).
+    if _ui_state._night_bright_mode:
+      if _ui_state.brightness_is_night:
+        return float((_ui_state.onroad_brightness - NIGHT_MODE_BASE + 1) * 5)
       return cur_brightness
 
     if not _ui_state.onroad_brightness_timer_expired:

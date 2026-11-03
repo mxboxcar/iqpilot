@@ -178,6 +178,7 @@ class HudRenderer(Widget):
     if self.is_cruise_set:
       self._draw_set_speed(rect)
 
+    self._draw_current_speed(rect)
     self._draw_steering_wheel(rect)
 
   def _draw_steering_wheel(self, rect: rl.Rectangle) -> None:
@@ -267,13 +268,13 @@ class HudRenderer(Widget):
     )
 
   def _draw_current_speed(self, rect: rl.Rectangle) -> None:
-    """Draw the current vehicle speed and unit."""
+    """lynx: always-on compact current speed, bottom right."""
+    size = 80
     speed_text = str(round(self.speed))
-    speed_text_size = measure_text_cached(self._font_bold, speed_text, FONT_SIZES.current_speed)
-    speed_pos = rl.Vector2(rect.x + rect.width / 2 - speed_text_size.x / 2, 180 - speed_text_size.y / 2)
-    rl.draw_text_ex(self._font_bold, speed_text, speed_pos, FONT_SIZES.current_speed, 0, COLORS.WHITE)
-
+    text_size = measure_text_cached(self._font_bold, speed_text, size)
+    x = rect.x + rect.width - text_size.x - 24
+    y = rect.y + rect.height - size - 36
+    rl.draw_text_ex(self._font_bold, speed_text, rl.Vector2(x, y), size, 0, COLORS.WHITE)
     unit_text = tr("km/h") if ui_state.is_metric else tr("mph")
-    unit_text_size = measure_text_cached(self._font_medium, unit_text, FONT_SIZES.speed_unit)
-    unit_pos = rl.Vector2(rect.x + rect.width / 2 - unit_text_size.x / 2, 290 - unit_text_size.y / 2)
-    rl.draw_text_ex(self._font_medium, unit_text, unit_pos, FONT_SIZES.speed_unit, 0, COLORS.WHITE_TRANSLUCENT)
+    unit_size = measure_text_cached(self._font_medium, unit_text, 28)
+    rl.draw_text_ex(self._font_medium, unit_text, rl.Vector2(rect.x + rect.width - unit_size.x - 24, rect.y + rect.height - 36), 28, 0, COLORS.WHITE_TRANSLUCENT)

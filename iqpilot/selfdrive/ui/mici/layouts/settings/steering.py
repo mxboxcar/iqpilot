@@ -24,6 +24,33 @@ def _aol_modes() -> list[str]:
   return [tr("stay engaged"), tr("standby"), tr("disengage")]
 
 
+# Manual lane position via the existing CameraOffset param (meters from lane centre,
+# NEGATIVE = right - shear sign is inverted; labels below flipped to match). Kept within the daemon's ±0.35 m clamp with margin. Applied by
+# shearing the model camera input (iqmodeld), not by injecting curvature.
+_LANE_OFFSET_VALUES = [round(-0.02 * i, 2) for i in range(13)]  # lynx: 0.00..-0.24 step 0.02, NEGATIVE=RIGHT
+
+
+def _lane_offset_labels() -> list[str]:
+  labels = []
+  for v in _LANE_OFFSET_VALUES:
+    if v < 0:
+      labels.append(f"{tr('right')} {abs(v):.2f} m")
+    elif v > 0:
+      labels.append(f"{tr('left')} {v:.2f} m")
+    else:
+      labels.append(tr("centre"))
+  return labels
+
+
+# Model steering smoothing: ModelLatSmoothSec is an INT in centiseconds (0..30 -> 0.00..0.30 s).
+# Capped at 0.20 s here: more smoothing makes the wheel noticeably laggy. Needs ModelSmoothingEnabled=1.
+_SMOOTH_VALUES = [0, 4, 6, 8, 10, 13, 16, 20]
+
+
+def _smooth_labels() -> list[str]:
+  return [tr("off") if v == 0 else f"{v / 100:.2f} s" for v in _SMOOTH_VALUES]
+
+
 def _has_limited_sab_options() -> bool:
   brand = ""
   if ui_state.is_offroad():
@@ -133,8 +160,14 @@ class SteeringLayoutMici(NavScroller):
                                   toggle_callback=self._on_turn_guards)
     self._refresh_turn_guards()
 
+    self._lane_offset = MappedParamToggle(tr("lane offset"), "CameraOffset",
+                                          _lane_offset_labels(), _LANE_OFFSET_VALUES)
+    self._smoothing = MappedParamToggle(tr("steering smoothing"), "ModelLatSmoothSec",
+                                        _smooth_labels(), _SMOOTH_VALUES)
+
     self._scroller.add_widgets([
       self._aol, self._sab_settings_button, self._lane_change, self._turn_guards,
+      self._lane_offset, self._smoothing,
     ])
 
   def _on_aol_toggled(self, checked: bool):
@@ -174,6 +207,10 @@ class SteeringLayoutMici(NavScroller):
     self._aol.set_value(tr("on") if self._aol._checked else tr("off"))
     self._aol.set_enabled(offroad)
     self._sab_settings_button.set_enabled(offroad and self._aol._checked)
+    self._lane_offset.refresh()
+    self._lane_offset.set_enabled(offroad)
+    self._smoothing.refresh()
+    self._smoothing.set_enabled(offroad)
 
   def _update_state(self):
     super()._update_state()

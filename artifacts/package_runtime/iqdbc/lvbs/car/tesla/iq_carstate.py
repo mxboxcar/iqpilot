@@ -18,6 +18,7 @@ class IQCarState:
     self.CP_IQ = CP_IQ
 
     self.infotainment_3_finger_press = 0
+    self.swc_right_pressed = 0
     self.vehicle_bus_available = bool(CP_IQ.flags & TeslaFlagsIQ.HAS_VEHICLE_BUS)
 
   def update(self, ret: structs.CarState, ret_iq: structs.IQCarState, can_parsers: dict[StrEnum, CANParser]) -> None:
@@ -39,6 +40,18 @@ class IQCarState:
       ret.buttonEvents = [*ret.buttonEvents,
                           *create_button_events(self.infotainment_3_finger_press, prev_infotainment_3_finger_press,
                                                 {3: ButtonType.lkas})]
+
+      # Right steering-wheel scroll wheel press -> cancel (disengage), so the driver can
+      # cancel without touching the brake, matching the stock Tesla ACC cancel gesture.
+      # VCLEFT_swcRightPressed is a multiplexed switch signal: 2 = SWITCH_ON (pressed),
+      # 1 = SWITCH_OFF, 0 = SNA, 3 = FAULT. Normalize to a clean pressed flag so SNA/FAULT
+      # transitions never emit spurious button events. The cancel is consumed generically in
+      # car_specific.py (EventName.buttonCancel); panda safety and accel/brake limits are untouched.
+      prev_swc_right_pressed = self.swc_right_pressed
+      self.swc_right_pressed = int(cp_adas.vl["VCLEFT_switchStatus"]["VCLEFT_swcRightPressed"] == 2)
+      ret.buttonEvents = [*ret.buttonEvents,
+                          *create_button_events(self.swc_right_pressed, prev_swc_right_pressed,
+                                                {1: ButtonType.cancel})]
 
       bms_soc_ui = float(cp_adas.vl["ID292BMS_SOC"].get("SOCUI292", 0.0))
       ui_range_mi = float(cp_adas.vl["ID33AUI_rangeSOC"].get("UI_Range", 0.0))

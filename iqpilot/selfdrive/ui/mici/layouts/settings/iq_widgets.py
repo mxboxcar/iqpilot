@@ -5,6 +5,7 @@ Copyright © IQ.Lvbs, apart of Project Teal Lvbs, All Rights Reserved, licensed 
 from iqpilot.common.params import Params, UnknownKeyName
 from iqpilot.common.ui_settings import LONGITUDINAL_MODE_VALUES
 from iqpilot.selfdrive.longitudinal_settings import (
+  LONGITUDINAL_MODE_CHILL,
   LONGITUDINAL_MODE_DYNAMIC,
   LONGITUDINAL_MODE_PILOT,
   LONGITUDINAL_MODE_STOCK,

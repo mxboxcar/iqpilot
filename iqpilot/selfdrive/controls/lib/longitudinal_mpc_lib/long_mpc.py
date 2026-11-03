@@ -33,7 +33,7 @@ COST_E_DIM = 5
 COST_DIM = COST_E_DIM + 1
 CONSTR_DIM = 4
 
-X_EGO_OBSTACLE_COST = 3.
+X_EGO_OBSTACLE_COST = 5.  # lynx: stock 3; start easing off a slower lead earlier
 X_EGO_COST = 0.
 V_EGO_COST = 0.
 A_EGO_COST = 0.
@@ -41,7 +41,7 @@ J_EGO_COST = 5.
 A_CHANGE_COST = 200.
 DANGER_ZONE_COST = 100.
 CRASH_DISTANCE = .25
-LEAD_DANGER_FACTOR = 0.75
+LEAD_DANGER_FACTOR = 0.9  # lynx: stock 0.75; tolerate less shortfall of the comfort gap before braking hard
 LIMIT_COST = 1e6
 ACADOS_SOLVER_TYPE = 'SQP_RTI'
 
@@ -64,12 +64,12 @@ def get_jerk_factor(personality=log.LongitudinalPersonality.standard):
   elif personality==log.LongitudinalPersonality.standard:
     return 1.0
   elif personality==log.LongitudinalPersonality.aggressive:
-    return 0.5
+    return 0.75  # lynx: stock 0.5 braked harshly, 1.0 let the gap collapse behind a slowing lead (seen in logs)
   else:
     raise NotImplementedError("Longitudinal personality not supported")
 
 
-def get_T_FOLLOW(personality=log.LongitudinalPersonality.standard):
+def _t_follow_base(personality):
   if personality==log.LongitudinalPersonality.relaxed:
     return 1.75
   elif personality==log.LongitudinalPersonality.standard:
@@ -78,6 +78,24 @@ def get_T_FOLLOW(personality=log.LongitudinalPersonality.standard):
     return 1.25
   else:
     raise NotImplementedError("Longitudinal personality not supported")
+
+
+def get_T_FOLLOW(personality=log.LongitudinalPersonality.standard, v_ego=None):
+  # lynx: speed-based follow time fitted to the owner's own manual following (measured 2026-10-29).
+  # Effective headway H(v) = 0.000348*kmh**2 - 0.03205*kmh + 1.874 s with kmh clamped to 10..100.
+  # The MPC adds STOP_DISTANCE on top of T*v, so T = H - STOP_DISTANCE/v (floored at 0.7 s) reproduces H.
+  # 'standard' is exactly that curve; relaxed / aggressive scale it by 1.75/1.45 and 1.25/1.45.
+  base = _t_follow_base(personality)
+  if v_ego is None:
+    return base
+  v = max(float(v_ego), 1.0)
+  kmh = min(100.0, max(10.0, v * 3.6))
+  if personality == log.LongitudinalPersonality.aggressive:
+    # lynx: aggressive follows the owner's rule: 2.0 s gap at <=20 km/h, 1.5 s at 40 km/h, linear down to 0.8 s at 100 km/h
+    gap = 1.5 + 0.5 * min(1.0, max(0.0, (40.0 - kmh) / 20.0)) - 0.7 * min(1.0, max(0.0, (kmh - 40.0) / 60.0))
+    return max(0.7, gap - STOP_DISTANCE / v)
+  headway = 0.000348 * kmh ** 2 - 0.03205 * kmh + 1.874
+  return max(0.7, headway - STOP_DISTANCE / v) * base / 1.45
 
 def get_stopped_equivalence_factor(v_lead):
   return (v_lead**2) / (2 * COMFORT_BRAKE)
@@ -325,7 +343,7 @@ class LongitudinalMpc:
 
   def update(self, modelV2, radarstate, personality=log.LongitudinalPersonality.standard):
     self.new_lead_mpc = self._read_new_lead_mpc()
-    t_follow = get_T_FOLLOW(personality)
+    t_follow = get_T_FOLLOW(personality, self.x0[1])
     model_leads = modelV2.leadsV3
 
     if self.new_lead_mpc:
