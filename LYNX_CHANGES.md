@@ -11,6 +11,7 @@ artifacts/package_runtime/iqdbc/lvbs/car/tesla/iq_carstate.py. Not yet tested on
 ---
 
 lynx r3: stop distance behind the lead 3.0 m -> 2.0 m (long_mpc.py STOP_GAP_SHIFT; the compiled solver keeps 3.0).
+lynx r4: stop distance 1.0 m; the shift fades out between ~5 and ~25 km/h so normal-speed following is unchanged.
 
 ---
 
