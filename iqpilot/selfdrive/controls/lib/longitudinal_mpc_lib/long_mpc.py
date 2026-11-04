@@ -53,7 +53,11 @@ T_IDXS = np.array(T_IDXS_LST)
 FCW_IDXS = T_IDXS < 5.0
 T_DIFFS = np.diff(T_IDXS, prepend=[0.])
 COMFORT_BRAKE = 2.5
-STOP_DISTANCE = 3.0
+STOP_DISTANCE = 3.0  # baked into the precompiled acados solver (c_generated_code); do not edit here
+# lynx: stop 2.0 m behind the lead instead of 3.0 m. The solver's STOP_DISTANCE is compiled in, so the
+# 1.0 m difference is applied in python by moving the obstacle that much farther away (all speeds).
+STOP_DISTANCE_TARGET = 2.0
+STOP_GAP_SHIFT = STOP_DISTANCE - STOP_DISTANCE_TARGET
 MIN_X_LEAD_FACTOR = 0.5
 LEAD_PULLAWAY_VREL = 0.5
 LEAD_PULLAWAY_ABRAKE = -0.5
@@ -359,8 +363,8 @@ class LongitudinalMpc:
     self.lead_xv_0 = lead_xv_0
     self.lead_xv_1 = lead_xv_1
 
-    lead_0_obstacle = lead_xv_0[:,0] + get_stopped_equivalence_factor(lead_xv_0[:,1])
-    lead_1_obstacle = lead_xv_1[:,0] + get_stopped_equivalence_factor(lead_xv_1[:,1])
+    lead_0_obstacle = lead_xv_0[:,0] + get_stopped_equivalence_factor(lead_xv_0[:,1]) + STOP_GAP_SHIFT
+    lead_1_obstacle = lead_xv_1[:,0] + get_stopped_equivalence_factor(lead_xv_1[:,1]) + STOP_GAP_SHIFT
 
     x_obstacles = np.column_stack([lead_0_obstacle, lead_1_obstacle])
     self.source = MPC_SOURCES[np.argmin(x_obstacles[0])]

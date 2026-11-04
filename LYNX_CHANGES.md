@@ -10,6 +10,10 @@ artifacts/package_runtime/iqdbc/lvbs/car/tesla/iq_carstate.py. Not yet tested on
 
 ---
 
+lynx r3: stop distance behind the lead 3.0 m -> 2.0 m (long_mpc.py STOP_GAP_SHIFT; the compiled solver keeps 3.0).
+
+---
+
 # lynx — บันทึกการแก้ไข (fork ของ mxboxcar)
 
 Fork ส่วนตัวของ IQ.Pilot สำหรับ **Tesla Model 3 (ไม่มีก้านเกียร์) บน comma four**
